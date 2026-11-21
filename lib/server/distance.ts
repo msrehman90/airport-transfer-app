@@ -69,8 +69,21 @@ async function googleDistance(origin: string | LatLng, destination: string | Lat
   return element.distanceMeters / METERS_PER_MILE;
 }
 
-function geoapifyKey(): string {
-  return process.env.GEOAPIFY_API_KEY || "";
+/**
+ * Geoapify API key. Also accepts a full Geoapify request URL pasted by mistake
+ * (e.g. the "sample request" from the dashboard) and extracts its apiKey parameter.
+ */
+export function geoapifyKey(raw: string | undefined = process.env.GEOAPIFY_API_KEY): string {
+  const value = (raw ?? "").trim();
+  if (!value) return "";
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      return new URL(value).searchParams.get("apiKey")?.trim() ?? "";
+    } catch {
+      return "";
+    }
+  }
+  return value;
 }
 
 async function geoapifyFetch<T>(url: URL): Promise<T> {

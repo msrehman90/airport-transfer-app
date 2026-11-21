@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { serverEnv } from "@/lib/env";
+import { geoapifyKey } from "@/lib/server/distance";
 import { handleRouteError } from "@/lib/server/http";
 import { getFlatRates, getVehicleClasses } from "@/lib/server/repo";
 
@@ -16,7 +17,7 @@ export async function GET() {
         supabase: serverEnv.supabaseReady(),
         stripe: serverEnv.stripeReady(),
         googleMaps: serverEnv.googleMapsReady(),
-        geoapify: Boolean(process.env.GEOAPIFY_API_KEY),
+        geoapify: Boolean(geoapifyKey()),
         airlabs: serverEnv.airlabsReady(),
         email: serverEnv.resendReady(),
       },
