@@ -22,26 +22,26 @@ export function SiteFooter() {
           <p className="eyebrow">Contact</p>
           <ul className="mt-4 space-y-2 text-sm text-ivory-dim">
             <li>
-              <a href={`tel:${BRAND.phone.replace(/[^+\d]/g, "")}`} className="hover:text-gold">
+              <a href={`tel:${BRAND.phone.replace(/[^+\d]/g, "")}`} className="hover:text-brand">
                 {BRAND.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${BRAND.email}`} className="hover:text-gold">
+              <a href={`mailto:${BRAND.email}`} className="hover:text-brand">
                 {BRAND.email}
               </a>
             </li>
             <li>
-              <Link href="/track" className="hover:text-gold">
+              <Link href="/track" className="hover:text-brand">
                 Manage a booking
               </Link>
             </li>
             <li className="flex gap-3 pt-2 text-xs text-muted">
-              <Link href="/admin" className="hover:text-gold">
+              <Link href="/admin" className="hover:text-brand">
                 Dispatch
               </Link>
               <span>·</span>
-              <Link href="/driver" className="hover:text-gold">
+              <Link href="/driver" className="hover:text-brand">
                 Driver portal
               </Link>
             </li>

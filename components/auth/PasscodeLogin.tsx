@@ -45,7 +45,7 @@ export function PasscodeLogin({
     <div className="mx-auto max-w-md py-16">
       <form onSubmit={submit} className="card-lux space-y-5 p-8">
         <div className="text-center">
-          <span className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-gold/50 text-gold">
+          <span className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-brand/50 text-brand">
             <KeyRound className="h-5 w-5" />
           </span>
           <h1 className="heading-lux mt-4 text-3xl">{role === "admin" ? "Dispatch sign-in" : "Driver sign-in"}</h1>

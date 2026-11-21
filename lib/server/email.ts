@@ -76,22 +76,22 @@ function tripRows(b: Booking): [string, string][] {
 
 function layout(title: string, intro: string, rows: [string, string][], lineItems: QuoteLineItem[], total: number, footer: string) {
   const site = serverEnv.siteUrl();
-  const html = `<!doctype html><html><body style="margin:0;background:#0b0b0c;font-family:Arial,Helvetica,sans-serif;color:#f5f1e8">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0b0b0c;padding:24px 0"><tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background:#141416;border:1px solid #2a2a2e;border-radius:12px;padding:32px">
-<tr><td style="font-size:12px;letter-spacing:3px;color:#c9a24b;text-transform:uppercase">${escapeHtml(BRAND.name)}</td></tr>
-<tr><td style="font-size:24px;padding:12px 0 8px;color:#f5f1e8">${escapeHtml(title)}</td></tr>
-<tr><td style="font-size:14px;color:#bdb6a6;padding-bottom:20px">${escapeHtml(intro)}</td></tr>
+  const html = `<!doctype html><html><body style="margin:0;background:#050c12;font-family:Arial,Helvetica,sans-serif;color:#eef5f8">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#050c12;padding:24px 0"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#0b1a25;border:1px solid #1b3244;border-radius:12px;padding:32px">
+<tr><td style="font-size:12px;letter-spacing:3px;color:#10b981;text-transform:uppercase">${escapeHtml(BRAND.name)}</td></tr>
+<tr><td style="font-size:24px;padding:12px 0 8px;color:#eef5f8">${escapeHtml(title)}</td></tr>
+<tr><td style="font-size:14px;color:#a9bfca;padding-bottom:20px">${escapeHtml(intro)}</td></tr>
 <tr><td><table width="100%" cellpadding="6" style="font-size:14px;border-collapse:collapse">
-${rows.map(([k, v]) => `<tr><td style="color:#8f897c;width:40%;border-bottom:1px solid #222">${escapeHtml(k)}</td><td style="border-bottom:1px solid #222">${escapeHtml(v)}</td></tr>`).join("")}
+${rows.map(([k, v]) => `<tr><td style="color:#6f8898;width:40%;border-bottom:1px solid #1b3244">${escapeHtml(k)}</td><td style="border-bottom:1px solid #1b3244">${escapeHtml(v)}</td></tr>`).join("")}
 </table></td></tr>
 <tr><td style="padding-top:20px"><table width="100%" cellpadding="6" style="font-size:14px">
-${lineItems.map((li) => `<tr><td style="color:#bdb6a6">${escapeHtml(li.label)}</td><td align="right">${formatUSD(li.amount)}</td></tr>`).join("")}
-<tr><td style="font-weight:bold;color:#c9a24b;border-top:1px solid #333">Total</td><td align="right" style="font-weight:bold;color:#c9a24b;border-top:1px solid #333">${formatUSD(total)}</td></tr>
+${lineItems.map((li) => `<tr><td style="color:#a9bfca">${escapeHtml(li.label)}</td><td align="right">${formatUSD(li.amount)}</td></tr>`).join("")}
+<tr><td style="font-weight:bold;color:#10b981;border-top:1px solid #1b3244">Total</td><td align="right" style="font-weight:bold;color:#10b981;border-top:1px solid #1b3244">${formatUSD(total)}</td></tr>
 </table></td></tr>
-<tr><td style="font-size:13px;color:#8f897c;padding-top:20px">${escapeHtml(footer)}</td></tr>
-<tr><td style="padding-top:20px"><a href="${site}/track" style="background:#c9a24b;color:#0b0b0c;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:bold;font-size:14px">Manage your booking</a></td></tr>
-<tr><td style="font-size:12px;color:#6c675d;padding-top:24px">${escapeHtml(BRAND.phone)} · ${escapeHtml(BRAND.email)}</td></tr>
+<tr><td style="font-size:13px;color:#6f8898;padding-top:20px">${escapeHtml(footer)}</td></tr>
+<tr><td style="padding-top:20px"><a href="${site}/track" style="background:#10b981;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:bold;font-size:14px">Manage your booking</a></td></tr>
+<tr><td style="font-size:12px;color:#6f8898;padding-top:24px">${escapeHtml(BRAND.phone)} · ${escapeHtml(BRAND.email)}</td></tr>
 </table></td></tr></table></body></html>`;
   const text = [
     `${BRAND.name} — ${title}`,

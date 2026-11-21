@@ -35,7 +35,7 @@ export function Faq() {
         <details key={item.q} className="group px-6 py-5 [&_summary::-webkit-details-marker]:hidden">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-ivory">
             <span className="font-medium">{item.q}</span>
-            <ChevronDown className="h-4 w-4 shrink-0 text-gold transition-transform group-open:rotate-180" />
+            <ChevronDown className="h-4 w-4 shrink-0 text-brand transition-transform group-open:rotate-180" />
           </summary>
           <p className="mt-3 text-sm leading-relaxed text-ivory-dim">{item.a}</p>
         </details>

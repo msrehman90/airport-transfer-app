@@ -50,7 +50,7 @@ export function RatesTable() {
             onClick={() => setAirport(a.code)}
             className={cn(
               "rounded-full border px-4 py-2 text-sm transition-colors",
-              airport === a.code ? "border-gold bg-gold text-ink" : "border-line text-ivory-dim hover:border-gold/50 hover:text-ivory",
+              airport === a.code ? "border-brand bg-brand text-ink" : "border-line text-ivory-dim hover:border-brand/50 hover:text-ivory",
             )}
           >
             {a.shortName}
@@ -91,7 +91,7 @@ export function RatesTable() {
                         {fare != null ? (
                           <Link
                             href={`/book?service=to_airport&airport=${airport}&zone=${z.slug}&vehicle=${v.slug}`}
-                            className="text-ivory-dim hover:text-gold"
+                            className="text-ivory-dim hover:text-brand"
                           >
                             {formatUSD(fare)}
                           </Link>

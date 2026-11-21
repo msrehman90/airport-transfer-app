@@ -82,9 +82,9 @@ export function StripePayment(props: {
       appearance: {
         theme: "night" as const,
         variables: {
-          colorPrimary: "#c9a24b",
-          colorBackground: "#111113",
-          colorText: "#f5f1e8",
+          colorPrimary: "#10b981",
+          colorBackground: "#07131c",
+          colorText: "#eef5f8",
           colorDanger: "#e06a5a",
           borderRadius: "12px",
           fontFamily: "Inter, system-ui, sans-serif",

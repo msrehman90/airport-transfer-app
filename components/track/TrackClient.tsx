@@ -192,7 +192,7 @@ export function TrackClient() {
       <div>
         {!booking && !loading && (
           <div className="card-lux grid place-items-center p-12 text-center text-ivory-dim">
-            <Car className="h-10 w-10 text-gold" />
+            <Car className="h-10 w-10 text-brand" />
             <p className="mt-4 max-w-sm">Enter your booking reference to see live status, your chauffeur and flight updates.</p>
           </div>
         )}
@@ -210,7 +210,7 @@ export function TrackClient() {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.25em] text-muted">{SERVICE_TYPE_LABELS[booking.serviceType]}</p>
-                  <p className="mt-1 font-mono text-2xl text-gold">{booking.bookingRef}</p>
+                  <p className="mt-1 font-mono text-2xl text-brand">{booking.bookingRef}</p>
                   <p className="mt-1 text-sm text-ivory-dim">{booking.customerName}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -232,8 +232,8 @@ export function TrackClient() {
                         <span
                           className={cn(
                             "grid h-8 w-8 place-items-center rounded-full border text-xs",
-                            reached ? "border-gold bg-gold text-ink" : "border-line text-muted",
-                            current && "ring-4 ring-gold/25",
+                            reached ? "border-brand bg-brand text-ink" : "border-line text-muted",
+                            current && "ring-4 ring-brand/25",
                           )}
                         >
                           {reached ? <Check className="h-4 w-4" /> : null}
@@ -285,10 +285,10 @@ export function TrackClient() {
                       )}
                       {booking.status !== "completed" && booking.status !== "cancelled" && (
                         <div className="mt-4 flex gap-2">
-                          <a href={`tel:${telHref(booking.driver.phone)}`} className="flex items-center gap-2 rounded-full border border-gold/50 px-4 py-2 text-sm text-gold hover:bg-gold/10">
+                          <a href={`tel:${telHref(booking.driver.phone)}`} className="flex items-center gap-2 rounded-full border border-brand/50 px-4 py-2 text-sm text-brand hover:bg-brand/10">
                             <Phone className="h-4 w-4" /> Call
                           </a>
-                          <a href={`sms:${telHref(booking.driver.phone)}`} className="flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-ivory-dim hover:border-gold/50">
+                          <a href={`sms:${telHref(booking.driver.phone)}`} className="flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm text-ivory-dim hover:border-brand/50">
                             <MessageSquare className="h-4 w-4" /> Text
                           </a>
                         </div>
@@ -305,14 +305,14 @@ export function TrackClient() {
                   <div className="card-lux p-6">
                     <div className="flex items-center justify-between">
                       <p className="eyebrow">Flight {booking.flightNumber}</p>
-                      <button type="button" onClick={checkFlight} className="text-muted hover:text-gold" aria-label="Refresh flight status">
+                      <button type="button" onClick={checkFlight} className="text-muted hover:text-brand" aria-label="Refresh flight status">
                         <RefreshCw className={cn("h-4 w-4", flightLoading && "animate-spin")} />
                       </button>
                     </div>
                     {flight ? (
                       <div className="mt-4 space-y-2 text-sm">
                         <p className="flex items-center gap-2">
-                          <Plane className="h-4 w-4 text-gold" />
+                          <Plane className="h-4 w-4 text-brand" />
                           <span className="capitalize text-ivory">{flight.status.replace("-", " ")}</span>
                           {flight.delayMinutes != null && flight.delayMinutes !== 0 && flight.status !== "cancelled" && (
                             <span className={flight.delayMinutes > 0 ? "text-warning" : "text-success"}>
@@ -390,7 +390,7 @@ export function TrackClient() {
 
             <p className="text-center text-xs text-muted">
               Questions about your ride? Call dispatch 24/7 at{" "}
-              <a href={`tel:${telHref(BRAND.phone)}`} className="text-gold">
+              <a href={`tel:${telHref(BRAND.phone)}`} className="text-brand">
                 {BRAND.phone}
               </a>
               {booking.airportCode ? ` · ${getAirport(booking.airportCode)?.shortName}` : ""}

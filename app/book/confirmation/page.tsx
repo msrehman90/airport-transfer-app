@@ -42,10 +42,10 @@ function Confirmation() {
       )}
       {state === "paid" && (
         <>
-          <CheckCircle2 className="mx-auto h-14 w-14 text-gold" />
+          <CheckCircle2 className="mx-auto h-14 w-14 text-brand" />
           <h1 className="heading-lux mt-4 text-4xl">Your ride is confirmed</h1>
           <p className="mt-3 text-ivory-dim">
-            Booking reference <span className="font-mono text-gold">{ref}</span>. A confirmation email is on its way.
+            Booking reference <span className="font-mono text-brand">{ref}</span>. A confirmation email is on its way.
           </p>
           <ButtonLink href={`/track?ref=${encodeURIComponent(ref)}`} className="mt-8">
             Manage booking

@@ -192,7 +192,7 @@ export function AddressInput({
                 e.preventDefault();
                 choose(s);
               }}
-              className={cn("cursor-pointer px-4 py-2.5 text-sm text-ivory-dim", i === active ? "bg-gold/15 text-ivory" : "hover:bg-white/5")}
+              className={cn("cursor-pointer px-4 py-2.5 text-sm text-ivory-dim", i === active ? "bg-brand/15 text-ivory" : "hover:bg-white/5")}
             >
               {s.text}
             </li>

@@ -151,7 +151,7 @@ function DutyBoard({ driverId, onSignOut }: { driverId: string; onSignOut: () =>
 
       {done.length > 0 && (
         <div className="mt-10">
-          <button type="button" className="text-sm text-ivory-dim hover:text-gold" onClick={() => setShowDone((v) => !v)}>
+          <button type="button" className="text-sm text-ivory-dim hover:text-brand" onClick={() => setShowDone((v) => !v)}>
             {showDone ? "Hide" : "Show"} completed rides ({done.length})
           </button>
           {showDone && (
@@ -159,7 +159,7 @@ function DutyBoard({ driverId, onSignOut }: { driverId: string; onSignOut: () =>
               {done.map((r) => (
                 <li key={r.id} className="flex justify-between rounded-xl border border-line px-4 py-3 text-sm text-ivory-dim">
                   <span>
-                    <span className="font-mono text-gold">{r.bookingRef}</span> · {r.customerName}
+                    <span className="font-mono text-brand">{r.bookingRef}</span> · {r.customerName}
                   </span>
                   <span>{formatDateTime(r.scheduledPickupAt, { withZone: false })}</span>
                 </li>
@@ -195,11 +195,11 @@ function RideCard({ ride, onUpdated }: { ride: BookingView; onUpdated: () => voi
   }
 
   return (
-    <article className={cn("card-lux overflow-hidden", ride.status === "en_route" || ride.status === "arrived" || ride.status === "in_progress" ? "border-gold/60" : "")}>
+    <article className={cn("card-lux overflow-hidden", ride.status === "en_route" || ride.status === "arrived" || ride.status === "in_progress" ? "border-brand/60" : "")}>
       <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
         <div>
           <p className="flex items-center gap-2 font-serif text-3xl text-ivory">
-            <Clock className="h-5 w-5 text-gold" /> {formatTime(pickupIso)}
+            <Clock className="h-5 w-5 text-brand" /> {formatTime(pickupIso)}
           </p>
           {ride.adjustedPickupAt && (
             <p className="text-xs text-warning">
@@ -216,7 +216,7 @@ function RideCard({ ride, onUpdated }: { ride: BookingView; onUpdated: () => voi
 
       <div className="space-y-3 px-5 py-4 text-sm">
         <p className="flex gap-3">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
           <span>
             <span className="block text-[11px] uppercase tracking-wider text-muted">Pickup</span>
             <span className="text-ivory">{ride.pickupAddress}</span>
@@ -233,24 +233,24 @@ function RideCard({ ride, onUpdated }: { ride: BookingView; onUpdated: () => voi
         )}
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-ivory-dim">
           <span className="flex items-center gap-1.5">
-            <Users className="h-4 w-4 text-gold" /> {ride.passengers}
+            <Users className="h-4 w-4 text-brand" /> {ride.passengers}
           </span>
           <span className="flex items-center gap-1.5">
-            <Briefcase className="h-4 w-4 text-gold" /> {ride.luggage}
+            <Briefcase className="h-4 w-4 text-brand" /> {ride.luggage}
           </span>
           {ride.flightNumber && (
             <span className="flex items-center gap-1.5">
-              <Plane className="h-4 w-4 text-gold" /> {ride.flightNumber}
+              <Plane className="h-4 w-4 text-brand" /> {ride.flightNumber}
               {airport ? ` · ${airport.code === "UNION_DC" ? "Union Stn" : airport.code}` : ""}
             </span>
           )}
           {ride.hoursBooked && <span>{ride.hoursBooked} hrs</span>}
-          {ride.meetAndGreet && <span className="text-gold">Meet & Greet: name sign at baggage claim</span>}
-          {ride.childSeats > 0 && <span className="text-gold">{ride.childSeats} child seat(s)</span>}
+          {ride.meetAndGreet && <span className="text-brand">Meet & Greet: name sign at baggage claim</span>}
+          {ride.childSeats > 0 && <span className="text-brand">{ride.childSeats} child seat(s)</span>}
         </div>
         {ride.notes && <p className="rounded-lg bg-white/5 px-3 py-2 text-ivory-dim">“{ride.notes}”</p>}
         <p className="text-ivory-dim">
-          <span className="text-ivory">{ride.customerName}</span> · <span className="font-mono text-xs text-gold">{ride.bookingRef}</span>
+          <span className="text-ivory">{ride.customerName}</span> · <span className="font-mono text-xs text-brand">{ride.bookingRef}</span>
         </p>
       </div>
 
@@ -259,13 +259,13 @@ function RideCard({ ride, onUpdated }: { ride: BookingView; onUpdated: () => voi
           href={mapsLink(target)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 rounded-full border border-gold/50 py-3 text-sm font-semibold text-gold hover:bg-gold/10"
+          className="flex items-center justify-center gap-2 rounded-full border border-brand/50 py-3 text-sm font-semibold text-brand hover:bg-brand/10"
         >
           <Navigation className="h-4 w-4" /> Navigate
         </a>
         <a
           href={`tel:${ride.customerPhone.replace(/[^+\d]/g, "")}`}
-          className="flex items-center justify-center gap-2 rounded-full border border-line py-3 text-sm font-semibold text-ivory-dim hover:border-gold/50"
+          className="flex items-center justify-center gap-2 rounded-full border border-line py-3 text-sm font-semibold text-ivory-dim hover:border-brand/50"
         >
           <Phone className="h-4 w-4" /> Call guest
         </a>

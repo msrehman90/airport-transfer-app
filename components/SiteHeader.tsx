@@ -21,14 +21,14 @@ export function SiteHeader() {
   const isApp = pathname.startsWith("/admin") || pathname.startsWith("/driver");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-ink/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-line/70 bg-ink/75 backdrop-blur-xl">
       <div className="container-lux flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-gold/60 font-serif text-lg text-gold">
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-steel-light/60 bg-[radial-gradient(circle_at_30%_30%,rgba(52,211,153,0.25),transparent_70%)] font-serif text-lg text-brand-light shadow-[0_0_18px_-4px_rgba(52,211,153,0.6)]">
             {BRAND.name.charAt(0)}
           </span>
           <span className="leading-tight">
-            <span className="block font-serif text-lg tracking-wide text-ivory">{BRAND.shortName}</span>
+            <span className="metal-text block font-serif text-lg tracking-wide">{BRAND.shortName}</span>
             <span className="block text-[10px] uppercase tracking-[0.28em] text-muted">Chauffeured</span>
           </span>
         </Link>
@@ -41,7 +41,7 @@ export function SiteHeader() {
                 href={item.href}
                 className={cn(
                   "rounded-full px-3.5 py-2 text-sm text-ivory-dim transition-colors hover:text-ivory",
-                  pathname === item.href && "text-gold",
+                  pathname === item.href && "text-brand",
                 )}
               >
                 {item.label}
@@ -53,7 +53,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <a
             href={`tel:${BRAND.phone.replace(/[^+\d]/g, "")}`}
-            className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm text-ivory-dim hover:text-gold md:flex"
+            className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm text-ivory-dim hover:text-brand md:flex"
           >
             <Phone className="h-4 w-4" /> {BRAND.phone}
           </a>
@@ -84,7 +84,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-2 py-3 text-ivory-dim hover:text-gold"
+                className="rounded-lg px-2 py-3 text-ivory-dim hover:text-brand"
               >
                 {item.label}
               </Link>

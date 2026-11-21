@@ -30,6 +30,7 @@ import {
   MIN_LEAD_TIME_MINUTES,
   SERVICE_TYPE_LABELS,
   VEHICLE_CLASSES,
+  VEHICLE_PHOTOS,
   getAirport,
   getZone,
   type VehicleSlug,
@@ -40,7 +41,7 @@ import { formatUSD, type ServiceType, type TripType } from "@/lib/pricing";
 import type { Booking, QuoteResult } from "@/lib/types";
 import { OTHER_ZONE, type BookingInput, type TripInput } from "@/lib/validation";
 import { AddressInput } from "../AddressInput";
-import { CarIllustration } from "../CarIllustration";
+import { Photo } from "../Photo";
 import { Alert, Button, ButtonLink, Field, Spinner, cn } from "../ui";
 import { StripePayment } from "./StripePayment";
 
@@ -362,15 +363,15 @@ export function BookingFlow() {
                 className="group w-full text-left disabled:cursor-default"
                 aria-current={i === step ? "step" : undefined}
               >
-                <span className={cn("block h-1 rounded-full transition-colors", i <= step ? "bg-gold" : "bg-line")} />
-                <span className={cn("mt-2 hidden text-xs sm:block", i === step ? "text-gold" : i < step ? "text-ivory-dim" : "text-muted")}>
+                <span className={cn("block h-1 rounded-full transition-colors", i <= step ? "bg-brand" : "bg-line")} />
+                <span className={cn("mt-2 hidden text-xs sm:block", i === step ? "text-brand" : i < step ? "text-ivory-dim" : "text-muted")}>
                   {i + 1}. {label}
                 </span>
               </button>
             </li>
           ))}
         </ol>
-        <p className="mb-6 text-sm text-gold sm:hidden">
+        <p className="mb-6 text-sm text-brand sm:hidden">
           Step {step + 1} of 4 · {STEPS[step]}
         </p>
 
@@ -398,11 +399,11 @@ export function BookingFlow() {
                         }}
                         className={cn(
                           "flex flex-col items-start gap-2 rounded-xl border p-3 text-left text-sm transition-colors",
-                          form.serviceType === s ? "border-gold bg-gold/10 text-ivory" : "border-line text-ivory-dim hover:border-gold/40",
+                          form.serviceType === s ? "border-brand bg-brand/10 text-ivory" : "border-line text-ivory-dim hover:border-brand/40",
                         )}
                         aria-pressed={form.serviceType === s}
                       >
-                        <Icon className="h-5 w-5 text-gold" />
+                        <Icon className="h-5 w-5 text-brand" />
                         {SERVICE_TYPE_LABELS[s]}
                       </button>
                     );
@@ -420,7 +421,7 @@ export function BookingFlow() {
                         onClick={() => update("tripType", t)}
                         className={cn(
                           "rounded-full border px-4 py-2 text-sm",
-                          form.tripType === t ? "border-gold bg-gold text-ink" : "border-line text-ivory-dim hover:border-gold/40",
+                          form.tripType === t ? "border-brand bg-brand text-ink" : "border-line text-ivory-dim hover:border-brand/40",
                         )}
                       >
                         {t === "one_way" ? "One way" : "Round trip"}
@@ -553,26 +554,34 @@ export function BookingFlow() {
                         onClick={() => update("vehicleSlug", v.slug)}
                         aria-pressed={selected}
                         className={cn(
-                          "relative rounded-2xl border p-4 text-left transition-colors",
-                          selected ? "border-gold bg-gold/[0.07]" : "border-line hover:border-gold/40",
+                          "group relative overflow-hidden rounded-2xl border text-left transition-colors",
+                          selected ? "border-brand bg-brand/[0.07] ring-1 ring-brand/50" : "border-line hover:border-steel-light/50",
                           tooSmall && "opacity-60",
                         )}
                       >
                         {selected && (
-                          <span className="absolute right-3 top-3 grid h-6 w-6 place-items-center rounded-full bg-gold text-ink">
+                          <span className="absolute right-3 top-3 z-10 grid h-7 w-7 place-items-center rounded-full bg-brand text-white shadow-lg">
                             <Check className="h-4 w-4" />
                           </span>
                         )}
-                        <CarIllustration slug={v.slug} className="h-20 w-full" />
-                        <p className="mt-2 font-serif text-xl text-ivory">{v.name}</p>
+                        <div className="relative h-36 overflow-hidden">
+                          <Photo
+                            photo={VEHICLE_PHOTOS[v.slug]}
+                            sizes="(min-width: 640px) 320px, 100vw"
+                            className="transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-panel to-transparent" />
+                        </div>
+                        <div className="px-4 pb-4">
+                        <p className="-mt-3 relative font-serif text-xl text-ivory">{v.name}</p>
                         <p className="text-xs text-muted">{v.exampleModels}</p>
                         <div className="mt-3 flex items-end justify-between">
                           <span className="flex gap-3 text-xs text-ivory-dim">
                             <span className="flex items-center gap-1">
-                              <Users className="h-3.5 w-3.5 text-gold" /> {v.maxPassengers}
+                              <Users className="h-3.5 w-3.5 text-brand" /> {v.maxPassengers}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Briefcase className="h-3.5 w-3.5 text-gold" /> {v.maxLuggage}
+                              <Briefcase className="h-3.5 w-3.5 text-brand" /> {v.maxLuggage}
                             </span>
                           </span>
                           <span className="text-right">
@@ -581,9 +590,10 @@ export function BookingFlow() {
                             ) : typeof q === "string" ? (
                               <span className="text-xs text-danger">Unavailable</span>
                             ) : (
-                              <span className="font-semibold text-gold">{formatUSD(q.breakdown.totalFare)}</span>
+                              <span className="font-semibold text-brand-light">{formatUSD(q.breakdown.totalFare)}</span>
                             )}
                           </span>
+                        </div>
                         </div>
                       </button>
                     );
@@ -627,19 +637,19 @@ export function BookingFlow() {
                   <label
                     className={cn(
                       "flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition-colors",
-                      form.meetAndGreet ? "border-gold bg-gold/[0.07]" : "border-line hover:border-gold/40",
+                      form.meetAndGreet ? "border-brand bg-brand/[0.07]" : "border-line hover:border-brand/40",
                     )}
                   >
                     <input
                       type="checkbox"
-                      className="mt-1 h-4 w-4 accent-[#c9a24b]"
+                      className="mt-1 h-4 w-4 accent-[#10b981]"
                       checked={form.meetAndGreet}
                       onChange={(e) => update("meetAndGreet", e.target.checked)}
                     />
                     <span>
                       <span className="flex items-center gap-2 font-medium text-ivory">
-                        <BadgeCheck className="h-4 w-4 text-gold" /> Meet & Greet inside the terminal{" "}
-                        <span className="text-gold">+${MEET_AND_GREET_FEE}</span>
+                        <BadgeCheck className="h-4 w-4 text-brand" /> Meet & Greet inside the terminal{" "}
+                        <span className="text-brand">+${MEET_AND_GREET_FEE}</span>
                       </span>
                       <span className="mt-1 block text-sm text-ivory-dim">
                         Your chauffeur waits at baggage claim with a name sign and helps with your luggage.
@@ -649,7 +659,7 @@ export function BookingFlow() {
                 )}
                 {form.childSeats > 0 && (
                   <p className="flex items-center gap-2 text-xs text-ivory-dim">
-                    <Baby className="h-4 w-4 text-gold" /> Tell us the children&apos;s ages in the notes on the next step.
+                    <Baby className="h-4 w-4 text-brand" /> Tell us the children&apos;s ages in the notes on the next step.
                   </p>
                 )}
               </div>
@@ -731,9 +741,9 @@ export function BookingFlow() {
                 {quote && <QuoteBreakdownCard quote={quote} />}
 
                 {payment && booking ? (
-                  <div className="rounded-2xl border border-gold/40 p-5">
+                  <div className="rounded-2xl border border-brand/40 p-5">
                     <p className="mb-4 flex items-center gap-2 text-sm text-ivory-dim">
-                      <CreditCard className="h-4 w-4 text-gold" /> Booking <span className="font-semibold text-ivory">{booking.bookingRef}</span> is
+                      <CreditCard className="h-4 w-4 text-brand" /> Booking <span className="font-semibold text-ivory">{booking.bookingRef}</span> is
                       held. Complete payment to confirm.
                     </p>
                     {payment.demo ? (
@@ -850,7 +860,7 @@ function ReviewSummary({ form }: { form: FormState }) {
 
 function QuoteBreakdownCard({ quote }: { quote: QuoteResult }) {
   return (
-    <div className="rounded-xl border border-gold/30 bg-gold/[0.04] p-4">
+    <div className="rounded-xl border border-brand/30 bg-brand/[0.04] p-4">
       <ul className="space-y-2 text-sm">
         {quote.lineItems.map((li) => (
           <li key={li.label} className="flex justify-between gap-4">
@@ -859,9 +869,9 @@ function QuoteBreakdownCard({ quote }: { quote: QuoteResult }) {
           </li>
         ))}
       </ul>
-      <div className="mt-3 flex items-baseline justify-between border-t border-gold/30 pt-3">
-        <span className="text-sm uppercase tracking-wider text-gold">Total</span>
-        <span className="font-serif text-3xl text-gold">{formatUSD(quote.breakdown.totalFare)}</span>
+      <div className="mt-3 flex items-baseline justify-between border-t border-brand/30 pt-3">
+        <span className="text-sm uppercase tracking-wider text-brand">Total</span>
+        <span className="font-serif text-3xl text-brand">{formatUSD(quote.breakdown.totalFare)}</span>
       </div>
     </div>
   );
@@ -872,7 +882,10 @@ function SidebarSummary({ form, quote }: { form: FormState; quote: QuoteResult |
   return (
     <div className="card-lux p-5">
       <p className="eyebrow">Your ride</p>
-      <CarIllustration slug={v.slug} className="mt-3 h-24 w-full" />
+      <div className="relative mt-3 h-36 overflow-hidden rounded-xl">
+        <Photo photo={VEHICLE_PHOTOS[v.slug]} sizes="360px" />
+        <div className="absolute inset-0 bg-gradient-to-t from-panel/80 to-transparent" />
+      </div>
       <p className="mt-2 font-serif text-2xl text-ivory">{v.name}</p>
       <dl className="mt-4 space-y-2 text-sm">
         {tripLines(form).map(([k, val]) => (
@@ -884,7 +897,7 @@ function SidebarSummary({ form, quote }: { form: FormState; quote: QuoteResult |
       </dl>
       <div className="mt-5 flex items-baseline justify-between border-t border-line pt-4">
         <span className="text-xs uppercase tracking-wider text-muted">Estimated total</span>
-        <span className="font-serif text-2xl text-gold">{quote ? formatUSD(quote.breakdown.totalFare) : "—"}</span>
+        <span className="font-serif text-2xl text-brand">{quote ? formatUSD(quote.breakdown.totalFare) : "—"}</span>
       </div>
       <p className="mt-3 text-xs text-muted">Final price is confirmed on the server before payment.</p>
     </div>
@@ -933,7 +946,7 @@ function BookingDone({ done }: { done: { kind: "paid" | "quote"; booking: Bookin
   const trackHref = `/track?ref=${encodeURIComponent(b.bookingRef)}&contact=${encodeURIComponent(b.customerEmail)}`;
   return (
     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="card-lux mx-auto max-w-2xl p-8 text-center sm:p-12">
-      <CheckCircle2 className="mx-auto h-14 w-14 text-gold" />
+      <CheckCircle2 className="mx-auto h-14 w-14 text-brand" />
       <h2 className="heading-lux mt-5 text-4xl">{done.kind === "paid" ? "Your ride is confirmed" : "Your quote is saved"}</h2>
       <p className="mt-3 text-ivory-dim">
         {done.kind === "paid"
@@ -944,9 +957,9 @@ function BookingDone({ done }: { done: { kind: "paid" | "quote"; booking: Bookin
               ? "Email delivery isn't configured yet, but your quote is saved under the reference below."
               : "Demo Mode: the quote email is printed in the server console instead of being sent."}
       </p>
-      <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-gold/40 bg-gold/[0.06] p-5">
+      <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-brand/40 bg-brand/[0.06] p-5">
         <p className="text-xs uppercase tracking-[0.25em] text-muted">Booking reference</p>
-        <p className="mt-2 font-mono text-3xl tracking-wider text-gold">{b.bookingRef}</p>
+        <p className="mt-2 font-mono text-3xl tracking-wider text-brand">{b.bookingRef}</p>
         <p className="mt-3 text-sm text-ivory-dim">{formatDateLong(b.scheduledPickupAt)}</p>
         <p className="mt-1 text-lg text-ivory">{formatUSD(b.finalFare ?? b.estimatedFare)}</p>
       </div>
@@ -963,7 +976,7 @@ function BookingDone({ done }: { done: { kind: "paid" | "quote"; booking: Bookin
         )}
       </div>
       <p className="mt-6 text-xs text-muted">
-        Need help? <Link href="/#faq" className="text-gold hover:underline">Read the FAQ</Link> or call dispatch any time.
+        Need help? <Link href="/#faq" className="text-brand hover:underline">Read the FAQ</Link> or call dispatch any time.
       </p>
     </motion.div>
   );

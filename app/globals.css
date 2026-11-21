@@ -1,20 +1,30 @@
 @import "tailwindcss";
 
+/*
+ * Premium Rentals theme — emerald green + metallic blue on a deep midnight base.
+ * Token names: brand = emerald accent, steel = metallic blue, ivory = cool light text.
+ */
 @theme {
-  --color-ink: #0b0b0c;
-  --color-ink-2: #111113;
-  --color-panel: #151518;
-  --color-panel-2: #1c1c20;
-  --color-line: #2a2a2f;
-  --color-ivory: #f5f1e8;
-  --color-ivory-dim: #bdb6a6;
-  --color-muted: #8f897c;
-  --color-gold: #c9a24b;
-  --color-gold-light: #e3c57d;
-  --color-gold-dark: #9c7b32;
-  --color-success: #4fb286;
-  --color-warning: #e0a83a;
-  --color-danger: #e06a5a;
+  --color-ink: #050c12;
+  --color-ink-2: #08141d;
+  --color-panel: #0b1a25;
+  --color-panel-2: #102332;
+  --color-line: #1b3244;
+  --color-ivory: #eef5f8;
+  --color-ivory-dim: #a9bfca;
+  --color-muted: #6f8898;
+
+  --color-brand: #10b981;
+  --color-brand-light: #34d399;
+  --color-brand-dark: #047857;
+
+  --color-steel: #3b6fb6;
+  --color-steel-light: #9cc4ec;
+  --color-steel-dark: #1d3a66;
+
+  --color-success: #34d399;
+  --color-warning: #f2b544;
+  --color-danger: #f0716a;
 
   --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -29,15 +39,15 @@
     @apply bg-ink text-ivory font-sans antialiased;
   }
   ::selection {
-    background: var(--color-gold);
-    color: var(--color-ink);
+    background: var(--color-brand);
+    color: #fff;
   }
   input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.8) sepia(0.6) saturate(3) hue-rotate(5deg);
+    filter: invert(0.75) sepia(1) saturate(4) hue-rotate(110deg);
     cursor: pointer;
   }
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-brand-light);
     outline-offset: 2px;
   }
 }
@@ -47,37 +57,65 @@
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.3em] text-gold;
+    @apply text-[11px] font-semibold uppercase tracking-[0.3em] text-brand-light;
   }
   .heading-lux {
     @apply font-serif font-medium tracking-tight text-ivory;
   }
-  .gold-text {
-    background: linear-gradient(100deg, var(--color-gold-light), var(--color-gold) 45%, var(--color-gold-dark));
+  /* Emerald → metallic blue gradient text */
+  .brand-text {
+    background: linear-gradient(100deg, var(--color-brand-light) 0%, var(--color-brand) 35%, #5fa8e8 70%, var(--color-steel-light) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Brushed metallic blue/silver text */
+  .metal-text {
+    background: linear-gradient(180deg, #f4f8fc 0%, #b8d2ee 40%, #6f9ccf 60%, #dbe8f6 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .card-lux {
     @apply rounded-2xl border border-line bg-panel/80 backdrop-blur;
+    box-shadow: inset 0 1px 0 rgba(156, 196, 236, 0.06);
+  }
+  /* Card with a thin emerald→blue metallic border */
+  .card-metal {
+    @apply rounded-2xl;
+    background:
+      linear-gradient(var(--color-panel), var(--color-panel)) padding-box,
+      linear-gradient(135deg, rgba(52, 211, 153, 0.55), rgba(59, 111, 182, 0.35) 45%, rgba(156, 196, 236, 0.55)) border-box;
+    border: 1px solid transparent;
   }
   .input-lux {
-    @apply w-full rounded-xl border border-line bg-ink-2 px-4 py-3 text-sm text-ivory placeholder:text-muted transition-colors focus:border-gold focus:outline-none disabled:opacity-50;
+    @apply w-full rounded-xl border border-line bg-ink-2 px-4 py-3 text-sm text-ivory placeholder:text-muted transition-colors focus:border-brand focus:outline-none disabled:opacity-50;
   }
   .label-lux {
     @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-ivory-dim;
   }
   .hero-glow {
     background:
-      radial-gradient(60% 50% at 70% 10%, rgba(201, 162, 75, 0.16), transparent 70%),
-      radial-gradient(40% 40% at 10% 80%, rgba(201, 162, 75, 0.08), transparent 70%);
+      radial-gradient(60% 50% at 75% 10%, rgba(16, 185, 129, 0.16), transparent 70%),
+      radial-gradient(45% 45% at 10% 85%, rgba(59, 111, 182, 0.18), transparent 70%);
   }
   .grid-fade {
     background-image:
-      linear-gradient(rgba(245, 241, 232, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(245, 241, 232, 0.035) 1px, transparent 1px);
+      linear-gradient(rgba(156, 196, 236, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(156, 196, 236, 0.04) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  /* Thin metallic divider line */
+  .metal-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(156, 196, 236, 0.5), rgba(52, 211, 153, 0.6), rgba(156, 196, 236, 0.5), transparent);
+  }
+  /* Dark gradient laid over photos so text stays readable */
+  .photo-shade {
+    background:
+      linear-gradient(90deg, rgba(5, 12, 18, 0.96) 0%, rgba(5, 12, 18, 0.82) 38%, rgba(5, 12, 18, 0.35) 70%, rgba(5, 12, 18, 0.6) 100%),
+      linear-gradient(0deg, rgba(5, 12, 18, 1) 0%, rgba(5, 12, 18, 0) 35%);
   }
 }
 

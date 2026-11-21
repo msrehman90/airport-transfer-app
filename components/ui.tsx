@@ -10,12 +10,13 @@ export function cn(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-type Variant = "gold" | "outline" | "ghost" | "danger";
+type Variant = "primary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variantClass: Record<Variant, string> = {
-  gold: "bg-gold text-ink hover:bg-gold-light shadow-[0_8px_30px_-10px_rgba(201,162,75,0.6)]",
-  outline: "border border-gold/60 text-gold hover:bg-gold/10",
+  primary:
+    "bg-[linear-gradient(135deg,var(--color-brand-light),var(--color-brand)_45%,#059669)] text-ink hover:brightness-110 shadow-[0_10px_30px_-10px_rgba(16,185,129,0.65)] ring-1 ring-inset ring-white/15",
+  outline: "border border-steel-light/50 text-steel-light hover:bg-steel/15 hover:border-steel-light",
   ghost: "text-ivory-dim hover:text-ivory hover:bg-white/5",
   danger: "border border-danger/60 text-danger hover:bg-danger/10",
 };
@@ -30,7 +31,7 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-wide transition-all disabled:cursor-not-allowed disabled:opacity-50";
 
 export function Button({
-  variant = "gold",
+  variant = "primary",
   size = "md",
   loading = false,
   className,
@@ -51,7 +52,7 @@ export function Button({
 }
 
 export function ButtonLink({
-  variant = "gold",
+  variant = "primary",
   size = "md",
   className,
   ...props
@@ -92,15 +93,15 @@ export function Field({
 }
 
 export function Spinner({ className }: { className?: string }) {
-  return <Loader2 className={cn("h-5 w-5 animate-spin text-gold", className)} aria-label="Loading" />;
+  return <Loader2 className={cn("h-5 w-5 animate-spin text-brand", className)} aria-label="Loading" />;
 }
 
 const statusTone: Record<BookingStatus, string> = {
   pending: "bg-warning/15 text-warning border-warning/30",
   confirmed: "bg-sky-400/10 text-sky-300 border-sky-400/30",
   assigned: "bg-violet-400/10 text-violet-300 border-violet-400/30",
-  en_route: "bg-gold/15 text-gold-light border-gold/40",
-  arrived: "bg-gold/20 text-gold-light border-gold/50",
+  en_route: "bg-steel/15 text-steel-light border-steel/40",
+  arrived: "bg-steel/25 text-steel-light border-steel/50",
   in_progress: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30",
   completed: "bg-success/15 text-success border-success/30",
   cancelled: "bg-danger/10 text-danger border-danger/30",
@@ -130,7 +131,7 @@ export function PaymentBadge({ status }: { status: PaymentStatus }) {
 
 export function Alert({ tone = "info", children }: { tone?: "info" | "error" | "success" | "warning"; children: ReactNode }) {
   const tones = {
-    info: "border-gold/30 bg-gold/5 text-ivory-dim",
+    info: "border-brand/30 bg-brand/5 text-ivory-dim",
     error: "border-danger/40 bg-danger/10 text-danger",
     success: "border-success/40 bg-success/10 text-success",
     warning: "border-warning/40 bg-warning/10 text-warning",

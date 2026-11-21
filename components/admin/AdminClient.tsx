@@ -122,7 +122,7 @@ function Dashboard({ onSignOut }: { onSignOut: () => void }) {
             onClick={() => setTab(id)}
             className={cn(
               "flex-1 rounded-full px-4 py-2 text-sm transition-colors sm:flex-none",
-              tab === id ? "bg-gold text-ink" : "text-ivory-dim hover:text-ivory",
+              tab === id ? "bg-brand text-ink" : "text-ivory-dim hover:text-ivory",
             )}
           >
             {label}
@@ -288,7 +288,7 @@ function Stat({ icon: Icon, label, value, tone }: { icon: typeof Plane; label: s
   return (
     <div className="card-lux p-4">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted">
-        <Icon className={cn("h-4 w-4", tone === "warning" ? "text-warning" : "text-gold")} /> {label}
+        <Icon className={cn("h-4 w-4", tone === "warning" ? "text-warning" : "text-brand")} /> {label}
       </div>
       <p className={cn("mt-2 font-serif text-3xl", tone === "warning" ? "text-warning" : "text-ivory")}>{value}</p>
     </div>
@@ -378,7 +378,7 @@ function BookingRow({
         </span>
         <span>
           <span className="block text-ivory">{b.customerName}</span>
-          <span className="font-mono text-[11px] text-gold">{b.bookingRef}</span>
+          <span className="font-mono text-[11px] text-brand">{b.bookingRef}</span>
         </span>
         <span className="text-ivory-dim">
           <span className="block text-[11px] uppercase tracking-wider text-muted">
@@ -405,11 +405,11 @@ function BookingRow({
           <dl className="grid grid-cols-[130px_1fr] gap-x-3 gap-y-2 text-sm">
             <dt className="text-muted">Contact</dt>
             <dd className="text-ivory">
-              <a href={`mailto:${b.customerEmail}`} className="hover:text-gold">
+              <a href={`mailto:${b.customerEmail}`} className="hover:text-brand">
                 {b.customerEmail}
               </a>{" "}
               ·{" "}
-              <a href={`tel:${b.customerPhone.replace(/[^+\d]/g, "")}`} className="hover:text-gold">
+              <a href={`tel:${b.customerPhone.replace(/[^+\d]/g, "")}`} className="hover:text-brand">
                 {b.customerPhone}
               </a>
             </dd>
@@ -594,7 +594,7 @@ function DriversPanel({ data, onChanged }: { data: AdminData; onChanged: () => v
             <tbody>
               {data.vehicles.map((v) => (
                 <tr key={v.id} className="border-b border-line/60 last:border-0">
-                  <td className="px-5 py-3 font-mono text-gold">{v.plateNumber}</td>
+                  <td className="px-5 py-3 font-mono text-brand">{v.plateNumber}</td>
                   <td className="px-5 py-3 text-ivory">
                     {v.year} {v.makeModel}
                   </td>
@@ -732,7 +732,7 @@ function RateRow({ zoneName, value, onSave }: { zoneName: string; value: number 
           aria-label={`${zoneName} fare`}
         />
       </div>
-      <Button size="sm" variant={dirty ? "gold" : "ghost"} onClick={save} loading={state === "saving"} disabled={!dirty}>
+      <Button size="sm" variant={dirty ? "primary" : "ghost"} onClick={save} loading={state === "saving"} disabled={!dirty}>
         Save
       </Button>
       <span className="w-24 text-xs">

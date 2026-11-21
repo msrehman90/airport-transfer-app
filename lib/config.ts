@@ -283,3 +283,60 @@ export const DEMO_VEHICLES = [
   { id: "veh-demo-3", vehicleSlug: "escalade", makeModel: "Cadillac Escalade ESV", plateNumber: "CEC-303", year: 2025, driverId: "drv-demo-3" },
   { id: "veh-demo-4", vehicleSlug: "sprinter", makeModel: "Mercedes-Benz Sprinter 3500", plateNumber: "CEC-404", year: 2023, driverId: null },
 ] as const;
+
+/* ------------------------------------------------------------------------- */
+/* Photography (Unsplash License: free for commercial use, no attribution    */
+/* required). Images are served from Unsplash's CDN in the size each slot needs. */
+/* Swap an id here to change a photo; use your own fleet photos when you have them. */
+/* ------------------------------------------------------------------------- */
+
+export interface Photo {
+  /** Unsplash image id, e.g. "1624085568108-36410cfe4d24" (the part after "photo-"). */
+  id: string;
+  alt: string;
+  /** CSS object-position so the car stays in frame when cropped. */
+  position?: string;
+}
+
+export const HERO_PHOTO: Photo = {
+  id: "1624085568108-36410cfe4d24",
+  alt: "White Mercedes-Benz sedan with headlights on, parked on a city street at night",
+  position: "70% 60%",
+};
+
+export const CTA_PHOTO: Photo = {
+  id: "1692632146184-08b6f4828a23",
+  alt: "Close-up of a black Mercedes-AMG grille and wheel",
+  position: "60% 50%",
+};
+
+export const VEHICLE_PHOTOS: Record<VehicleSlug, Photo> = {
+  sedan: {
+    id: "1671332752309-259609d9801f",
+    alt: "Black Mercedes-Benz sedans on a city street at night",
+    position: "50% 60%",
+  },
+  suv: {
+    id: "1769787301187-0fab290ba2f2",
+    alt: "Chauffeur in a suit walking past black executive SUVs",
+    position: "50% 55%",
+  },
+  escalade: {
+    id: "1778541999438-983cff5703fa",
+    alt: "Metallic blue Cadillac Escalade parked on a city street",
+    position: "55% 65%",
+  },
+  sprinter: {
+    id: "1765461734605-34657fa04db2",
+    alt: "Black Mercedes-Benz van with its headlights on",
+    position: "50% 50%",
+  },
+};
+
+export function photoUrl(photo: Photo, width: number, quality = 75): string {
+  return `https://images.unsplash.com/photo-${photo.id}?auto=format&fit=crop&w=${width}&q=${quality}`;
+}
+
+export function photoSrcSet(photo: Photo, widths: number[] = [480, 800, 1200, 1600, 2000]): string {
+  return widths.map((w) => `${photoUrl(photo, w)} ${w}w`).join(", ");
+}

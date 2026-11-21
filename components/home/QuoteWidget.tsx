@@ -99,7 +99,7 @@ export function QuoteWidget() {
             }}
             className={cn(
               "flex flex-col items-center gap-1 rounded-full px-1 py-2 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:flex-row sm:justify-center sm:text-[11px]",
-              service === id ? "bg-gold text-ink" : "text-ivory-dim hover:text-ivory",
+              service === id ? "bg-brand text-ink" : "text-ivory-dim hover:text-ivory",
             )}
           >
             <Icon className="h-3.5 w-3.5" aria-hidden />
@@ -250,7 +250,7 @@ export function QuoteWidget() {
         {error && <Alert tone="error">{error}</Alert>}
 
         {quote ? (
-          <div className="flex flex-col gap-4 rounded-xl border border-gold/40 bg-gold/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 rounded-xl border border-brand/40 bg-brand/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-wider text-ivory-dim">
                 {quote.breakdown.pricingMethod === "flat_rate"
@@ -259,7 +259,7 @@ export function QuoteWidget() {
                     ? `${quote.billableHours} hour minimum applies`
                     : `${quote.distanceMiles} miles`}
               </p>
-              <p className="font-serif text-4xl text-gold">{formatUSD(quote.breakdown.totalFare)}</p>
+              <p className="font-serif text-4xl text-brand">{formatUSD(quote.breakdown.totalFare)}</p>
               <p className="text-xs text-muted">One way · no surge pricing, ever</p>
             </div>
             <Button type="button" size="lg" onClick={continueToBooking}>
