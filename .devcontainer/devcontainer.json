@@ -1,0 +1,25 @@
+{
+  "name": "Airport Transfer App",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "hostRequirements": { "cpus": 2 },
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Website", "onAutoForward": "openBrowser" }
+  },
+  "remoteEnv": {
+    "NEXT_PUBLIC_SITE_URL": "https://${containerEnv:CODESPACE_NAME}-3000.${containerEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
+  },
+  "secrets": {
+    "NEXT_PUBLIC_SUPABASE_URL": { "description": "Supabase project URL, e.g. https://xxxx.supabase.co" },
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": { "description": "Supabase Publishable key (sb_publishable_...)" },
+    "SUPABASE_SERVICE_ROLE_KEY": { "description": "Supabase Secret key (sb_secret_...)" },
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": { "description": "Stripe test publishable key (pk_test_...)" },
+    "STRIPE_SECRET_KEY": { "description": "Stripe test secret key (sk_test_...)" }
+  },
+  "postCreateCommand": "npm ci",
+  "postAttachCommand": "npm run dev",
+  "customizations": {
+    "codespaces": { "openFiles": ["README.md"] },
+    "vscode": { "extensions": ["dbaeumer.vscode-eslint", "bradlc.vscode-tailwindcss"] }
+  }
+}
