@@ -31,7 +31,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <Photo photo={HERO_PHOTO} priority className="scale-105" />
+          <Photo photo={HERO_PHOTO} priority />
           <div className="photo-shade absolute inset-0" />
           <div className="hero-glow absolute inset-0" />
         </div>
@@ -70,7 +70,7 @@ export default function HomePage() {
             <QuoteWidget />
           </div>
         </div>
-        <div className="relative border-y border-white/10 bg-ink/70 backdrop-blur">
+        <div className="relative border-y border-white/10 bg-ink/85">
           <div className="container-lux flex flex-wrap items-center justify-center gap-x-10 gap-y-3 py-5 text-xs uppercase tracking-[0.25em] text-steel-light/80">
             {AIRPORTS.map((a) => (
               <span key={a.code}>{a.shortName}</span>
