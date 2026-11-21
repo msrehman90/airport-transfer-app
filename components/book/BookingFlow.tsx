@@ -29,10 +29,12 @@ import {
   MEET_AND_GREET_FEE,
   MIN_LEAD_TIME_MINUTES,
   SERVICE_TYPE_LABELS,
+  VEHICLE_CATEGORIES,
   VEHICLE_CLASSES,
   VEHICLE_PHOTOS,
   getAirport,
   getZone,
+  type VehicleCategory,
   type VehicleSlug,
 } from "@/lib/config";
 import { ApiError, LIVE_DATA, confirmPayment, createBooking, fetchQuote, startPayment, type PaymentStart } from "@/lib/client/api";
@@ -220,6 +222,9 @@ export function BookingFlow() {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [vehicleQuotes, setVehicleQuotes] = useState<Partial<Record<VehicleSlug, QuoteResult | string>>>({});
+  const [vehicleCategory, setVehicleCategory] = useState<VehicleCategory>(
+    () => VEHICLE_CLASSES.find((v) => v.slug === form.vehicleSlug)?.category ?? "sedan",
+  );
   const [quote, setQuote] = useState<QuoteResult | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -375,7 +380,7 @@ export function BookingFlow() {
           Step {step + 1} of 4 · {STEPS[step]}
         </p>
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={step}
             initial={{ opacity: 0, y: 10 }}
@@ -542,8 +547,25 @@ export function BookingFlow() {
 
             {step === 1 && (
               <div className="space-y-6">
+                <div className="flex flex-wrap gap-2" role="tablist" aria-label="Vehicle type">
+                  {VEHICLE_CATEGORIES.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={vehicleCategory === c.id}
+                      onClick={() => setVehicleCategory(c.id)}
+                      className={cn(
+                        "rounded-full border px-4 py-2 text-sm transition-colors",
+                        vehicleCategory === c.id ? "border-brand bg-brand text-white" : "border-line text-ivory-dim hover:border-brand/40",
+                      )}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {VEHICLE_CLASSES.map((v) => {
+                  {VEHICLE_CLASSES.filter((v) => v.category === vehicleCategory).map((v) => {
                     const q = vehicleQuotes[v.slug];
                     const selected = form.vehicleSlug === v.slug;
                     const tooSmall = form.passengers > v.maxPassengers || form.luggage > v.maxLuggage;
@@ -606,7 +628,7 @@ export function BookingFlow() {
                 <div className="grid gap-4 sm:grid-cols-3">
                   <Field label="Passengers" htmlFor="pax" error={errors.passengers}>
                     <select id="pax" className="input-lux" value={form.passengers} onChange={(e) => update("passengers", Number(e.target.value))}>
-                      {Array.from({ length: 13 }, (_, i) => i + 1).map((n) => (
+                      {Array.from({ length: 28 }, (_, i) => i + 1).map((n) => (
                         <option key={n} value={n}>
                           {n}
                         </option>
@@ -615,7 +637,7 @@ export function BookingFlow() {
                   </Field>
                   <Field label="Large bags" htmlFor="bags" error={errors.luggage}>
                     <select id="bags" className="input-lux" value={form.luggage} onChange={(e) => update("luggage", Number(e.target.value))}>
-                      {Array.from({ length: 11 }, (_, i) => i).map((n) => (
+                      {Array.from({ length: 29 }, (_, i) => i).map((n) => (
                         <option key={n} value={n}>
                           {n}
                         </option>

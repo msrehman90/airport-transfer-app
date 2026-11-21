@@ -40,7 +40,7 @@
     }
   },
   "postCreateCommand": "npm ci",
-  "postAttachCommand": "npm run dev",
+  "postAttachCommand": "npm run preview",
   "customizations": {
     "codespaces": {
       "openFiles": [

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowRight, Clock, MapPin, PlaneLanding, PlaneTakeoff, Route } from "lucide-react";
-import { AIRPORTS, CITY_ZONES, VEHICLE_CLASSES, type VehicleSlug } from "@/lib/config";
+import { AIRPORTS, CITY_ZONES, VEHICLE_CATEGORIES, VEHICLE_CLASSES, type VehicleSlug } from "@/lib/config";
 import { fetchQuote } from "@/lib/client/api";
 import { formatUSD, type ServiceType } from "@/lib/pricing";
 import type { QuoteResult } from "@/lib/types";
@@ -239,10 +239,14 @@ export function QuoteWidget() {
               reset();
             }}
           >
-            {VEHICLE_CLASSES.map((v) => (
-              <option key={v.slug} value={v.slug}>
-                {v.name} · up to {v.maxPassengers} passengers
-              </option>
+            {VEHICLE_CATEGORIES.map((c) => (
+              <optgroup key={c.id} label={c.label}>
+                {VEHICLE_CLASSES.filter((v) => v.category === c.id).map((v) => (
+                  <option key={v.slug} value={v.slug}>
+                    {v.name} · up to {v.maxPassengers} passengers
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </Field>

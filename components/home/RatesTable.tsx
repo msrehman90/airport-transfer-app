@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { AIRPORTS, CITY_ZONES, VEHICLE_CLASSES } from "@/lib/config";
+import { AIRPORTS, CITY_ZONES, VEHICLE_CATEGORIES, VEHICLE_CLASSES, type VehicleCategory } from "@/lib/config";
 import { fetchCatalog, type Catalog } from "@/lib/client/api";
 import { subscribeDemoDB } from "@/lib/client/demo-store";
 import { demoCatalog } from "@/lib/client/demo-store";
@@ -12,6 +12,8 @@ import { Spinner, cn } from "../ui";
 export function RatesTable() {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [airport, setAirport] = useState<string>("DCA");
+  const [category, setCategory] = useState<VehicleCategory>("sedan");
+  const columns = VEHICLE_CLASSES.filter((v) => v.category === category);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,6 +60,24 @@ export function RatesTable() {
         ))}
       </div>
 
+      <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Vehicle type">
+        {VEHICLE_CATEGORIES.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            role="tab"
+            aria-selected={category === c.id}
+            onClick={() => setCategory(c.id)}
+            className={cn(
+              "rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors",
+              category === c.id ? "bg-brand-light/10 text-brand-light" : "text-muted hover:text-ivory",
+            )}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
       {error && <p className="mb-3 text-xs text-warning">Showing standard rates ({error}).</p>}
 
       <div className="card-lux overflow-x-auto">
@@ -70,7 +90,7 @@ export function RatesTable() {
             <thead>
               <tr className="border-b border-line text-left text-xs uppercase tracking-wider text-muted">
                 <th className="px-5 py-4 font-medium">City / Area</th>
-                {VEHICLE_CLASSES.map((v) => (
+                {columns.map((v) => (
                   <th key={v.slug} className="px-5 py-4 text-right font-medium">
                     {v.name}
                   </th>
@@ -84,7 +104,7 @@ export function RatesTable() {
                     <span className="text-ivory">{z.name}</span>
                     <span className="ml-2 text-xs text-muted">{z.state}</span>
                   </td>
-                  {VEHICLE_CLASSES.map((v) => {
+                  {columns.map((v) => {
                     const fare = lookup.get(`${airport}|${z.slug}|${v.slug}`);
                     return (
                       <td key={v.slug} className="px-5 py-3.5 text-right tabular-nums">

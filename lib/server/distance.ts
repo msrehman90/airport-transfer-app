@@ -17,6 +17,9 @@ const METERS_PER_MILE = 1609.344;
 const ROAD_FACTOR = 1.3;
 
 const geocodeCache = new Map<string, LatLng>();
+/** Route results cached for an hour so pricing all vehicle classes costs one lookup. */
+const routeCache = new Map<string, { result: DistanceResult; at: number }>();
+const ROUTE_CACHE_MS = 60 * 60 * 1000;
 
 function googleServerKey(): string {
   return process.env.GOOGLE_MAPS_SERVER_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -190,6 +193,19 @@ export async function geocodeOSM(address: string): Promise<LatLng> {
  * with a road-distance factor.
  */
 export async function getDrivingDistanceMiles(
+  origin: string | LatLng,
+  destination: string | LatLng,
+): Promise<DistanceResult> {
+  const cacheKey = JSON.stringify([origin, destination]).toLowerCase();
+  const hit = routeCache.get(cacheKey);
+  if (hit && Date.now() - hit.at < ROUTE_CACHE_MS) return hit.result;
+  const result = await computeDrivingDistanceMiles(origin, destination);
+  if (routeCache.size > 2000) routeCache.clear();
+  routeCache.set(cacheKey, { result, at: Date.now() });
+  return result;
+}
+
+async function computeDrivingDistanceMiles(
   origin: string | LatLng,
   destination: string | LatLng,
 ): Promise<DistanceResult> {

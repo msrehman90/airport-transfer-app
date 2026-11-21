@@ -1,6 +1,7 @@
 -- ===========================================================================
 -- Airport Transfer Booking App — Supabase / PostgreSQL schema + seed data
--- Run this whole file once in the Supabase SQL editor (it is idempotent).
+-- Run this whole file in the Supabase SQL editor. It is idempotent: re-running it
+-- adds new vehicle classes and flat rates without touching existing bookings.
 -- ===========================================================================
 
 create extension if not exists "uuid-ossp";
@@ -144,10 +145,18 @@ create policy "Public read flat rates" on public.flat_rates for select using (tr
 insert into public.vehicle_classes
   (slug, name, description, example_models, max_passengers, max_luggage, hourly_rate, min_hours, base_fare, per_mile_rate, sort_order)
 values
-  ('sedan',    'Luxury Sedan',      'Quiet, refined comfort for solo travelers and couples.', 'Volvo S90, Mercedes E-Class or similar', 4,  2,  70.00, 3,  45.00, 3.50, 1),
-  ('suv',      'Executive SUV',     'Room for the whole family and their luggage.',           'Lexus LX, Chevrolet Suburban or similar',              6,  5,  90.00, 3,  65.00, 4.25, 2),
-  ('escalade', 'Cadillac Escalade', 'Flagship luxury with first-class presence.',             'Cadillac Escalade or similar',                         6,  5, 110.00, 3,  85.00, 5.00, 3),
-  ('sprinter', 'Mercedes Sprinter', 'Executive van for groups, teams and events.',            'Mercedes-Benz Sprinter or similar',                    13, 10, 145.00, 3, 120.00, 6.50, 4)
+  ('sedan',              'Business Sedan',        'The everyday executive choice for airport runs and meetings.',            'Mercedes E-Class, Volvo S90, Cadillac CT5 or similar', 3,  3,   70.00, 3,  45.00, 3.50, 1),
+  ('electric_sedan',     'Electric Luxury Sedan', 'Silent, zero-emission comfort with a smooth, modern ride.',              'Tesla Model S, Mercedes EQS or similar',               3,  2,   75.00, 3,  50.00, 3.75, 2),
+  ('first_class_sedan',  'First Class Sedan',     'Flagship sedan with reclining rear seats for VIPs and executives.',      'Mercedes S-Class, BMW 7 Series or similar',            3,  3,  110.00, 3,  80.00, 5.00, 3),
+  ('ultra_luxury_sedan', 'Rolls-Royce Ghost',     'The ultimate statement for weddings, galas and special guests.',          'Rolls-Royce Ghost, Bentley Flying Spur or similar',    3,  2,  250.00, 3, 200.00, 9.00, 4),
+  ('suv',                'Executive SUV',         'Room for the whole family and their luggage. Our most booked vehicle.',  'Chevrolet Suburban, GMC Yukon XL or similar',          6,  6,   90.00, 3,  65.00, 4.25, 5),
+  ('escalade',           'Cadillac Escalade',     'Full-size luxury SUV with first-class presence.',                         'Cadillac Escalade, Lincoln Navigator or similar',      6,  5,  110.00, 3,  85.00, 5.00, 6),
+  ('premium_suv',        'Premium SUV',           'European and Japanese flagship SUVs with a refined cabin.',               'Lexus LX, Mercedes GLS, BMW X7 or similar',            4,  4,  125.00, 3,  95.00, 5.50, 7),
+  ('ultra_luxury_suv',   'Rolls-Royce Cullinan',  'Ultra-luxury SUV for the most discerning travelers.',                     'Rolls-Royce Cullinan, Bentley Bentayga or similar',    4,  4,  275.00, 3, 225.00, 9.50, 8),
+  ('stretch_limo',       'Stretch Limousine',     'Classic stretch limo for proms, weddings and nights out.',                'Chrysler 300 or Lincoln stretch limousine',            10, 4,  150.00, 3, 125.00, 6.50, 9),
+  ('sprinter',           'Executive Sprinter',    'Executive van for teams, families and roadshows.',                        'Mercedes-Benz Sprinter or similar',                    13, 10, 145.00, 3, 120.00, 6.50, 10),
+  ('sprinter_limo',      'Luxury Sprinter Limo',  'Limo-style lounge seating, mood lighting and a premium sound system.',    'Mercedes-Benz Sprinter Limo or similar',               10, 8,  175.00, 3, 140.00, 7.00, 11),
+  ('mini_coach',         'Executive Mini Coach',  'Comfortable coach for corporate groups, events and airport shuttles.',    '28-passenger executive mini coach',                    28, 28, 195.00, 4, 175.00, 8.00, 12)
 on conflict (slug) do update set
   name = excluded.name,
   description = excluded.description,
@@ -178,7 +187,9 @@ with sedan_rates (city_zone, airport_code, sedan_fare) as (
     ('baltimore', 'DCA', 125),   ('baltimore', 'IAD', 155),   ('baltimore', 'BWI', 65),    ('baltimore', 'UNION_DC', 125)
 ),
 multipliers (slug, multiplier) as (
-  values ('sedan', 1.0), ('suv', 1.3), ('escalade', 1.6), ('sprinter', 2.2)
+  values ('sedan', 1.0), ('electric_sedan', 1.1), ('first_class_sedan', 1.6), ('ultra_luxury_sedan', 3.5),
+         ('suv', 1.3), ('escalade', 1.6), ('premium_suv', 1.8), ('ultra_luxury_suv', 3.8),
+         ('stretch_limo', 2.3), ('sprinter', 2.2), ('sprinter_limo', 2.6), ('mini_coach', 3.0)
 )
 insert into public.flat_rates (airport_code, city_zone, vehicle_class_id, one_way_fare)
 select s.airport_code, s.city_zone, vc.id, round(s.sedan_fare * m.multiplier / 5.0) * 5

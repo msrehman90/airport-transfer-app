@@ -50,7 +50,7 @@ Open http://localhost:3000.
 GitHub Pages can't run this app (it only hosts static files, and the app needs its server for pricing and payments). Codespaces runs the full app in GitHub's cloud for free (60 hours/month on a 2-core machine for personal accounts).
 
 1. Optional: add your test keys as Codespaces secrets at **GitHub → Settings → Codespaces → Secrets** (names as in `.env.example`) and give them access to this repository. Without them the app runs in Demo Mode.
-2. On the repo page click **Code → Codespaces → Create codespace on main**. Dependencies install and the site starts automatically.
+2. On the repo page click **Code → Codespaces → Create codespace on main**. Dependencies install and the site builds and starts automatically in production mode (`npm run preview`). After pulling new code, stop it with Ctrl+C and run `npm run preview` again.
 3. In the **Ports** tab, right-click port 3000 → **Port visibility → Public** to get a link you can open on any device or share with testers.
 
 The link only works while the codespace is running; it stops after ~30 minutes of inactivity. Restart it from https://github.com/codespaces.

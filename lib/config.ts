@@ -105,11 +105,32 @@ export const CITY_ZONES: CityZone[] = [
   { slug: "baltimore", name: "Baltimore (Inner Harbor / Downtown)", state: "MD", lat: 39.2858, lng: -76.6131 },
 ];
 
-export type VehicleSlug = "sedan" | "suv" | "escalade" | "sprinter";
+export type VehicleSlug =
+  | "sedan"
+  | "electric_sedan"
+  | "first_class_sedan"
+  | "ultra_luxury_sedan"
+  | "suv"
+  | "escalade"
+  | "premium_suv"
+  | "ultra_luxury_suv"
+  | "stretch_limo"
+  | "sprinter"
+  | "sprinter_limo"
+  | "mini_coach";
+
+export type VehicleCategory = "sedan" | "suv" | "group";
+
+export const VEHICLE_CATEGORIES: { id: VehicleCategory; label: string }[] = [
+  { id: "sedan", label: "Sedans" },
+  { id: "suv", label: "SUVs" },
+  { id: "group", label: "Limos & Groups" },
+];
 
 export interface VehicleClassSeed {
   slug: VehicleSlug;
   name: string;
+  category: VehicleCategory;
   description: string;
   exampleModels: string;
   maxPassengers: number;
@@ -120,40 +141,94 @@ export interface VehicleClassSeed {
   perMileRate: number;
   /** Multiplier applied to the sedan flat-rate matrix (rounded to the nearest $5). */
   flatRateMultiplier: number;
+  /** Shown with a "Most booked" badge. */
+  popular?: boolean;
 }
 
+/**
+ * The fleet: 12 premium classes covering the vehicles chauffeur clients book most.
+ * Prices are example rates — edit them here (and in supabase/schema.sql) to match your own.
+ */
 export const VEHICLE_CLASSES: VehicleClassSeed[] = [
   {
     slug: "sedan",
-    name: "Luxury Sedan",
-    description: "Quiet, refined comfort for solo travelers and couples.",
-    exampleModels: "Volvo S90, Mercedes E-Class or similar",
-    maxPassengers: 4,
-    maxLuggage: 2,
+    name: "Business Sedan",
+    category: "sedan",
+    description: "The everyday executive choice for airport runs and meetings.",
+    exampleModels: "Mercedes E-Class, Volvo S90, Cadillac CT5 or similar",
+    maxPassengers: 3,
+    maxLuggage: 3,
     hourlyRate: 70,
     minHours: 3,
     baseFare: 45,
     perMileRate: 3.5,
     flatRateMultiplier: 1,
+    popular: true,
+  },
+  {
+    slug: "electric_sedan",
+    name: "Electric Luxury Sedan",
+    category: "sedan",
+    description: "Silent, zero-emission comfort with a smooth, modern ride.",
+    exampleModels: "Tesla Model S, Mercedes EQS or similar",
+    maxPassengers: 3,
+    maxLuggage: 2,
+    hourlyRate: 75,
+    minHours: 3,
+    baseFare: 50,
+    perMileRate: 3.75,
+    flatRateMultiplier: 1.1,
+  },
+  {
+    slug: "first_class_sedan",
+    name: "First Class Sedan",
+    category: "sedan",
+    description: "Flagship sedan with reclining rear seats for VIPs and executives.",
+    exampleModels: "Mercedes S-Class, BMW 7 Series or similar",
+    maxPassengers: 3,
+    maxLuggage: 3,
+    hourlyRate: 110,
+    minHours: 3,
+    baseFare: 80,
+    perMileRate: 5,
+    flatRateMultiplier: 1.6,
+    popular: true,
+  },
+  {
+    slug: "ultra_luxury_sedan",
+    name: "Rolls-Royce Ghost",
+    category: "sedan",
+    description: "The ultimate statement for weddings, galas and special guests.",
+    exampleModels: "Rolls-Royce Ghost, Bentley Flying Spur or similar",
+    maxPassengers: 3,
+    maxLuggage: 2,
+    hourlyRate: 250,
+    minHours: 3,
+    baseFare: 200,
+    perMileRate: 9,
+    flatRateMultiplier: 3.5,
   },
   {
     slug: "suv",
     name: "Executive SUV",
-    description: "Room for the whole family and their luggage.",
-    exampleModels: "Lexus LX, Chevrolet Suburban or similar",
+    category: "suv",
+    description: "Room for the whole family and their luggage. Our most booked vehicle.",
+    exampleModels: "Chevrolet Suburban, GMC Yukon XL or similar",
     maxPassengers: 6,
-    maxLuggage: 5,
+    maxLuggage: 6,
     hourlyRate: 90,
     minHours: 3,
     baseFare: 65,
     perMileRate: 4.25,
     flatRateMultiplier: 1.3,
+    popular: true,
   },
   {
     slug: "escalade",
     name: "Cadillac Escalade",
-    description: "Flagship luxury with first-class presence.",
-    exampleModels: "Cadillac Escalade or similar",
+    category: "suv",
+    description: "Full-size luxury SUV with first-class presence.",
+    exampleModels: "Cadillac Escalade, Lincoln Navigator or similar",
     maxPassengers: 6,
     maxLuggage: 5,
     hourlyRate: 110,
@@ -161,11 +236,55 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     baseFare: 85,
     perMileRate: 5,
     flatRateMultiplier: 1.6,
+    popular: true,
+  },
+  {
+    slug: "premium_suv",
+    name: "Premium SUV",
+    category: "suv",
+    description: "European and Japanese flagship SUVs with a refined cabin.",
+    exampleModels: "Lexus LX, Mercedes GLS, BMW X7 or similar",
+    maxPassengers: 4,
+    maxLuggage: 4,
+    hourlyRate: 125,
+    minHours: 3,
+    baseFare: 95,
+    perMileRate: 5.5,
+    flatRateMultiplier: 1.8,
+  },
+  {
+    slug: "ultra_luxury_suv",
+    name: "Rolls-Royce Cullinan",
+    category: "suv",
+    description: "Ultra-luxury SUV for the most discerning travelers.",
+    exampleModels: "Rolls-Royce Cullinan, Bentley Bentayga or similar",
+    maxPassengers: 4,
+    maxLuggage: 4,
+    hourlyRate: 275,
+    minHours: 3,
+    baseFare: 225,
+    perMileRate: 9.5,
+    flatRateMultiplier: 3.8,
+  },
+  {
+    slug: "stretch_limo",
+    name: "Stretch Limousine",
+    category: "group",
+    description: "Classic stretch limo for proms, weddings and nights out.",
+    exampleModels: "Chrysler 300 or Lincoln stretch limousine",
+    maxPassengers: 10,
+    maxLuggage: 4,
+    hourlyRate: 150,
+    minHours: 3,
+    baseFare: 125,
+    perMileRate: 6.5,
+    flatRateMultiplier: 2.3,
   },
   {
     slug: "sprinter",
-    name: "Mercedes Sprinter",
-    description: "Executive van for groups, teams and events.",
+    name: "Executive Sprinter",
+    category: "group",
+    description: "Executive van for teams, families and roadshows.",
     exampleModels: "Mercedes-Benz Sprinter or similar",
     maxPassengers: 13,
     maxLuggage: 10,
@@ -174,6 +293,35 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     baseFare: 120,
     perMileRate: 6.5,
     flatRateMultiplier: 2.2,
+    popular: true,
+  },
+  {
+    slug: "sprinter_limo",
+    name: "Luxury Sprinter Limo",
+    category: "group",
+    description: "Limo-style lounge seating, mood lighting and a premium sound system.",
+    exampleModels: "Mercedes-Benz Sprinter Limo or similar",
+    maxPassengers: 10,
+    maxLuggage: 8,
+    hourlyRate: 175,
+    minHours: 3,
+    baseFare: 140,
+    perMileRate: 7,
+    flatRateMultiplier: 2.6,
+  },
+  {
+    slug: "mini_coach",
+    name: "Executive Mini Coach",
+    category: "group",
+    description: "Comfortable coach for corporate groups, events and airport shuttles.",
+    exampleModels: "28-passenger executive mini coach",
+    maxPassengers: 28,
+    maxLuggage: 28,
+    hourlyRate: 195,
+    minHours: 4,
+    baseFare: 175,
+    perMileRate: 8,
+    flatRateMultiplier: 3,
   },
 ];
 
@@ -202,7 +350,8 @@ export interface FlatRateRow {
 }
 
 export function roundToNearest5(value: number): number {
-  return Math.round(value / 5) * 5;
+  // Small epsilon so floating-point results like 172.4999… round the same way as PostgreSQL numeric.
+  return Math.round(value / 5 + 1e-9) * 5;
 }
 
 /** Expands the sedan matrix into a full (airport, zone, vehicle) flat-rate table. */
@@ -318,29 +467,18 @@ export const CTA_PHOTO: Photo = {
 };
 
 export const VEHICLE_PHOTOS: Record<VehicleSlug, Photo> = {
-  sedan: {
-    local: "volvo-s90",
-    widths: [524],
-    alt: "White luxury sedan on a city street",
-    position: "45% 60%",
-  },
-  suv: {
-    local: "lexus-lx",
-    widths: [800, 1200],
-    alt: "Grey full-size luxury SUV driving on a highway",
-    position: "45% 62%",
-  },
-  escalade: {
-    local: "cadillac-escalade",
-    widths: [800, 1200],
-    alt: "Black Cadillac Escalade driving on a desert highway",
-    position: "55% 60%",
-  },
-  sprinter: {
-    id: "1765461734605-34657fa04db2",
-    alt: "Black Mercedes-Benz van with its headlights on",
-    position: "50% 50%",
-  },
+  sedan: { local: "volvo-s90", widths: [524], alt: "White luxury sedan on a city street", position: "45% 60%" },
+  electric_sedan: { id: "1676856577533-1e8099932f7b", alt: "Black Tesla Model S parked outdoors", position: "50% 60%" },
+  first_class_sedan: { id: "1619221496652-7ee3d7406203", alt: "Black Mercedes-Benz S-Class parked at night", position: "55% 60%" },
+  ultra_luxury_sedan: { id: "1740098160485-d098fbf42814", alt: "Black Rolls-Royce parked on a city street", position: "40% 60%" },
+  suv: { id: "1769787301187-0fab290ba2f2", alt: "Chauffeur in a suit walking past black executive SUVs", position: "50% 55%" },
+  escalade: { local: "cadillac-escalade", widths: [800, 1200], alt: "Black Cadillac Escalade driving on a desert highway", position: "55% 60%" },
+  premium_suv: { local: "lexus-lx", widths: [800, 1200], alt: "Grey full-size luxury SUV driving on a highway", position: "45% 62%" },
+  ultra_luxury_suv: { id: "1687634366100-547fd24324f1", alt: "Black Rolls-Royce Cullinan parked in front of a building", position: "50% 60%" },
+  stretch_limo: { id: "1676107773690-9d670f8b1afa", alt: "White stretch limousine parked on a street", position: "50% 60%" },
+  sprinter: { id: "1765461734605-34657fa04db2", alt: "Black Mercedes-Benz van with its headlights on", position: "50% 50%" },
+  sprinter_limo: { id: "1767023025057-9f4033342df2", alt: "Luxury limousine interior with leather seating", position: "50% 55%" },
+  mini_coach: { id: "1570125909517-53cb21c89ff2", alt: "Grey and black executive coach on the road", position: "50% 55%" },
 };
 
 /** Extra photos for the "experience" gallery on the home page. */

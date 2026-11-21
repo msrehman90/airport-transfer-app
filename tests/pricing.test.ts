@@ -10,6 +10,11 @@ const sedan = getVehicleSeed("sedan")!;
 const sprinter = getVehicleSeed("sprinter")!;
 
 describe("calculateQuote", () => {
+  it("has at least 10 vehicle classes with unique slugs", () => {
+    assert.ok(VEHICLE_CLASSES.length >= 10);
+    assert.equal(new Set(VEHICLE_CLASSES.map((v) => v.slug)).size, VEHICLE_CLASSES.length);
+  });
+
   it("prices hourly with the 3-hour minimum", () => {
     const q = calculateQuote({ serviceType: "hourly", tripType: "one_way", hours: 2, vehicle: sedan, meetAndGreet: false, childSeats: 0 });
     assert.equal(q.totalFare, 210);
@@ -66,16 +71,15 @@ describe("calculateQuote", () => {
 describe("flat-rate seed", () => {
   it("covers every vehicle class for every zone/airport pair", () => {
     assert.equal(DEFAULT_FLAT_RATES.length % VEHICLE_CLASSES.length, 0);
-    const dcaDowntown = DEFAULT_FLAT_RATES.filter((r) => r.airportCode === "DCA" && r.cityZone === "dc_downtown");
-    assert.deepEqual(
-      dcaDowntown.map((r) => [r.vehicleSlug, r.oneWayFare]),
-      [
-        ["sedan", 65],
-        ["suv", 85],
-        ["escalade", 105],
-        ["sprinter", 145],
-      ],
+    const dcaDowntown = new Map(
+      DEFAULT_FLAT_RATES.filter((r) => r.airportCode === "DCA" && r.cityZone === "dc_downtown").map((r) => [r.vehicleSlug, r.oneWayFare]),
     );
+    assert.equal(dcaDowntown.size, VEHICLE_CLASSES.length);
+    assert.equal(dcaDowntown.get("sedan"), 65);
+    assert.equal(dcaDowntown.get("suv"), 85);
+    assert.equal(dcaDowntown.get("escalade"), 105);
+    assert.equal(dcaDowntown.get("sprinter"), 145);
+    assert.equal(dcaDowntown.get("ultra_luxury_sedan"), 230);
   });
 });
 

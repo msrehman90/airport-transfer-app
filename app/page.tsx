@@ -1,13 +1,11 @@
-import Link from "next/link";
-import { BadgeCheck, Briefcase, CigaretteOff, Clock3, PlaneLanding, ShieldCheck, Sparkles, Star, Users, Wifi } from "lucide-react";
+import { BadgeCheck, CigaretteOff, Clock3, PlaneLanding, ShieldCheck, Sparkles, Star, Wifi } from "lucide-react";
 import { Faq } from "@/components/home/Faq";
-import { FleetCarousel } from "@/components/home/FleetCarousel";
+import { FleetGrid } from "@/components/home/FleetGrid";
 import { QuoteWidget } from "@/components/home/QuoteWidget";
 import { RatesTable } from "@/components/home/RatesTable";
 import { Photo } from "@/components/Photo";
 import { ButtonLink } from "@/components/ui";
-import { AIRPORTS, BRAND, CTA_PHOTO, FREE_CANCELLATION_HOURS, GALLERY_PHOTOS, HERO_PHOTO, VEHICLE_CLASSES, VEHICLE_PHOTOS } from "@/lib/config";
-import { formatUSD } from "@/lib/pricing";
+import { AIRPORTS, BRAND, CTA_PHOTO, FREE_CANCELLATION_HOURS, GALLERY_PHOTOS, HERO_PHOTO, VEHICLE_CLASSES } from "@/lib/config";
 
 const HIGHLIGHTS = [
   { icon: Clock3, title: "24/7 Availability", text: "Early flights, red-eyes and holidays. Dispatch is always on." },
@@ -82,48 +80,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Vehicle photo tiles */}
-      <section className="container-lux pt-20">
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {VEHICLE_CLASSES.map((v) => (
-            <Link
-              key={v.slug}
-              href={`/book?vehicle=${v.slug}`}
-              className="card-metal group relative block aspect-[4/5] overflow-hidden sm:aspect-[3/4]"
-            >
-              <Photo
-                photo={VEHICLE_PHOTOS[v.slug]}
-                sizes="(min-width: 1024px) 25vw, 50vw"
-                className="transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                <p className="font-serif text-xl text-white sm:text-2xl">{v.name}</p>
-                <p className="mt-1 flex items-center gap-3 text-xs text-white/85">
-                  <span className="flex items-center gap-1">
-                    <Users className="h-3.5 w-3.5" /> {v.maxPassengers}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Briefcase className="h-3.5 w-3.5" /> {v.maxLuggage}
-                  </span>
-                  <span className="ml-auto font-semibold text-emerald-300">from {formatUSD(v.baseFare)}</span>
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* Fleet */}
       <section id="fleet" className="container-lux scroll-mt-20 py-20">
         <div className="mb-10 max-w-2xl">
           <p className="eyebrow">The Fleet</p>
           <h2 className="heading-lux mt-3 text-4xl sm:text-5xl">A vehicle for every occasion</h2>
           <p className="mt-4 text-ivory-dim">
-            From a discreet sedan for a solo business trip to a Sprinter for the whole team.
+            {VEHICLE_CLASSES.length} premium classes, from a business sedan for a solo trip to a Rolls-Royce for the big day and a
+            coach for the whole team.
           </p>
         </div>
-        <FleetCarousel />
+        <FleetGrid />
       </section>
 
       {/* Rates */}
