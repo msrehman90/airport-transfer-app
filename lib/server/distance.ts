@@ -31,28 +31,42 @@ export function haversineMiles(a: LatLng, b: LatLng): number {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-async function googleDistance(origin: string, destination: string, key: string): Promise<number> {
-  const url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json");
-  url.searchParams.set("origins", origin);
-  url.searchParams.set("destinations", destination);
-  url.searchParams.set("units", "imperial");
-  url.searchParams.set("key", key);
+function toWaypoint(p: string | LatLng) {
+  return typeof p === "string"
+    ? { waypoint: { address: p } }
+    : { waypoint: { location: { latLng: { latitude: p.lat, longitude: p.lng } } } };
+}
+
+/** Google Routes API (computeRouteMatrix) — the current replacement for the legacy Distance Matrix API. */
+async function googleDistance(origin: string | LatLng, destination: string | LatLng, key: string): Promise<number> {
   let res: Response;
   try {
-    res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8000) });
+    res = await fetch("https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": key,
+        "X-Goog-FieldMask": "originIndex,destinationIndex,distanceMeters,condition",
+      },
+      body: JSON.stringify({
+        origins: [toWaypoint(origin)],
+        destinations: [toWaypoint(destination)],
+        travelMode: "DRIVE",
+        units: "IMPERIAL",
+      }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
   } catch {
     throw new DistanceError("Distance service is unreachable.");
   }
-  if (!res.ok) throw new DistanceError(`Distance service returned ${res.status}`);
-  const data = (await res.json()) as {
-    status: string;
-    rows?: { elements?: { status: string; distance?: { value: number } }[] }[];
-  };
-  const element = data.rows?.[0]?.elements?.[0];
-  if (data.status !== "OK" || !element || element.status !== "OK" || !element.distance) {
+  if (!res.ok) throw new DistanceError(`Distance service returned ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = (await res.json()) as { distanceMeters?: number; condition?: string }[];
+  const element = Array.isArray(data) ? data[0] : undefined;
+  if (!element || element.condition !== "ROUTE_EXISTS" || typeof element.distanceMeters !== "number") {
     throw new DistanceError("We couldn't find a driving route between those addresses.");
   }
-  return element.distance.value / METERS_PER_MILE;
+  return element.distanceMeters / METERS_PER_MILE;
 }
 
 export async function geocodeOSM(address: string): Promise<LatLng> {
@@ -86,7 +100,7 @@ export async function geocodeOSM(address: string): Promise<LatLng> {
 /**
  * Driving distance in miles between two places. Each end may be a free-text address
  * or known coordinates (used for configured airports/stations).
- * Uses Google Distance Matrix when a key is set, otherwise OpenStreetMap geocoding
+ * Uses the Google Routes API (route matrix) when a key is set, otherwise OpenStreetMap geocoding
  * with a road-distance factor.
  */
 export async function getDrivingDistanceMiles(
@@ -94,15 +108,13 @@ export async function getDrivingDistanceMiles(
   destination: string | LatLng,
 ): Promise<DistanceResult> {
   const key = googleServerKey();
-  const asText = (p: string | LatLng) => (typeof p === "string" ? p : `${p.lat},${p.lng}`);
-
   if (key) {
     try {
-      const miles = await googleDistance(asText(origin), asText(destination), key);
+      const miles = await googleDistance(origin, destination, key);
       return { miles: Math.round(miles * 10) / 10, source: "google" };
     } catch (err) {
-      // Fall through to OSM if Google is misconfigured (e.g. referrer-restricted key).
-      console.warn("[distance] Google Distance Matrix failed, using OpenStreetMap fallback:", (err as Error).message);
+      // Fall through to OSM if Google is misconfigured (e.g. referrer-restricted key or API not enabled).
+      console.warn("[distance] Google Routes API failed, using OpenStreetMap fallback:", (err as Error).message);
     }
   }
 
