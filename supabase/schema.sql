@@ -144,10 +144,10 @@ create policy "Public read flat rates" on public.flat_rates for select using (tr
 insert into public.vehicle_classes
   (slug, name, description, example_models, max_passengers, max_luggage, hourly_rate, min_hours, base_fare, per_mile_rate, sort_order)
 values
-  ('sedan',    'Luxury Sedan',      'Quiet, refined comfort for solo travelers and couples.', 'Mercedes E-Class, Cadillac CT6, Lincoln Continental', 4,  2,  70.00, 3,  45.00, 3.50, 1),
-  ('suv',      'Executive SUV',     'Room for the whole family and their luggage.',           'Chevrolet Suburban, GMC Yukon XL',                     6,  5,  90.00, 3,  65.00, 4.25, 2),
-  ('escalade', 'Cadillac Escalade', 'Flagship luxury with first-class presence.',             'Cadillac Escalade ESV',                                6,  5, 110.00, 3,  85.00, 5.00, 3),
-  ('sprinter', 'Mercedes Sprinter', 'Executive van for groups, teams and events.',            'Mercedes-Benz Sprinter Executive',                     13, 10, 145.00, 3, 120.00, 6.50, 4)
+  ('sedan',    'Luxury Sedan',      'Quiet, refined comfort for solo travelers and couples.', 'Volvo S90, Mercedes E-Class or similar', 4,  2,  70.00, 3,  45.00, 3.50, 1),
+  ('suv',      'Executive SUV',     'Room for the whole family and their luggage.',           'Lexus LX, Chevrolet Suburban or similar',              6,  5,  90.00, 3,  65.00, 4.25, 2),
+  ('escalade', 'Cadillac Escalade', 'Flagship luxury with first-class presence.',             'Cadillac Escalade or similar',                         6,  5, 110.00, 3,  85.00, 5.00, 3),
+  ('sprinter', 'Mercedes Sprinter', 'Executive van for groups, teams and events.',            'Mercedes-Benz Sprinter or similar',                    13, 10, 145.00, 3, 120.00, 6.50, 4)
 on conflict (slug) do update set
   name = excluded.name,
   description = excluded.description,

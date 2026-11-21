@@ -6,7 +6,7 @@ import { QuoteWidget } from "@/components/home/QuoteWidget";
 import { RatesTable } from "@/components/home/RatesTable";
 import { Photo } from "@/components/Photo";
 import { ButtonLink } from "@/components/ui";
-import { AIRPORTS, BRAND, CTA_PHOTO, FREE_CANCELLATION_HOURS, HERO_PHOTO, VEHICLE_CLASSES, VEHICLE_PHOTOS } from "@/lib/config";
+import { AIRPORTS, BRAND, CTA_PHOTO, FREE_CANCELLATION_HOURS, GALLERY_PHOTOS, HERO_PHOTO, VEHICLE_CLASSES, VEHICLE_PHOTOS } from "@/lib/config";
 import { formatUSD } from "@/lib/pricing";
 
 const HIGHLIGHTS = [
@@ -165,6 +165,38 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-ivory-dim">{text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="container-lux pb-20">
+        <div className="mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+          <div>
+            <p className="eyebrow">The experience</p>
+            <h2 className="heading-lux mt-3 text-4xl sm:text-5xl">
+              Travel in <span className="brand-text italic">something special</span>
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm text-muted">Photos show representative vehicles. Your car will be the class you book or similar.</p>
+        </div>
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
+          {GALLERY_PHOTOS.map((p, i) => (
+            <figure
+              key={p.alt}
+              className={`card-metal group relative overflow-hidden ${i === 0 ? "aspect-square md:row-span-2 md:aspect-auto" : "aspect-[16/10]"}`}
+            >
+              <Photo photo={p} sizes="(min-width: 768px) 33vw, 100vw" className="transition-transform duration-700 group-hover:scale-105" />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 font-serif text-lg text-white">
+                {p.caption}
+              </figcaption>
+            </figure>
+          ))}
+          <div className="card-metal flex flex-col justify-center gap-3 p-6 md:col-span-2">
+            <p className="metal-text font-serif text-2xl">Late-model. Detailed before every ride.</p>
+            <p className="text-sm text-ivory-dim">
+              Leather interiors, climate control, Wi-Fi and chargers in every vehicle, driven by vetted, uniformed chauffeurs.
+            </p>
           </div>
         </div>
       </section>

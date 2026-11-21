@@ -127,7 +127,7 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     slug: "sedan",
     name: "Luxury Sedan",
     description: "Quiet, refined comfort for solo travelers and couples.",
-    exampleModels: "Mercedes E-Class, Cadillac CT6, Lincoln Continental",
+    exampleModels: "Volvo S90, Mercedes E-Class or similar",
     maxPassengers: 4,
     maxLuggage: 2,
     hourlyRate: 70,
@@ -140,7 +140,7 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     slug: "suv",
     name: "Executive SUV",
     description: "Room for the whole family and their luggage.",
-    exampleModels: "Chevrolet Suburban, GMC Yukon XL",
+    exampleModels: "Lexus LX, Chevrolet Suburban or similar",
     maxPassengers: 6,
     maxLuggage: 5,
     hourlyRate: 90,
@@ -153,7 +153,7 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     slug: "escalade",
     name: "Cadillac Escalade",
     description: "Flagship luxury with first-class presence.",
-    exampleModels: "Cadillac Escalade ESV",
+    exampleModels: "Cadillac Escalade or similar",
     maxPassengers: 6,
     maxLuggage: 5,
     hourlyRate: 110,
@@ -166,7 +166,7 @@ export const VEHICLE_CLASSES: VehicleClassSeed[] = [
     slug: "sprinter",
     name: "Mercedes Sprinter",
     description: "Executive van for groups, teams and events.",
-    exampleModels: "Mercedes-Benz Sprinter Executive",
+    exampleModels: "Mercedes-Benz Sprinter or similar",
     maxPassengers: 13,
     maxLuggage: 10,
     hourlyRate: 145,
@@ -285,46 +285,56 @@ export const DEMO_VEHICLES = [
 ] as const;
 
 /* ------------------------------------------------------------------------- */
-/* Photography (Unsplash License: free for commercial use, no attribution    */
-/* required). Images are served from Unsplash's CDN in the size each slot needs. */
-/* Swap an id here to change a photo; use your own fleet photos when you have them. */
+/* Photography                                                               */
+/* Local photos live in public/images/cars as <name>-<width>.webp.            */
+/* Remote photos use the Unsplash CDN (Unsplash License: free commercial use). */
+/* Swap entries here to change a photo.                                       */
 /* ------------------------------------------------------------------------- */
 
 export interface Photo {
-  /** Unsplash image id, e.g. "1624085568108-36410cfe4d24" (the part after "photo-"). */
-  id: string;
+  /** Local file base name in public/images/cars, e.g. "cadillac-escalade". */
+  local?: string;
+  /** Widths available for the local file (e.g. [800, 1200]). */
+  widths?: number[];
+  /** Unsplash image id, e.g. "1765461734605-34657fa04db2" (used when `local` is not set). */
+  id?: string;
   alt: string;
   /** CSS object-position so the car stays in frame when cropped. */
   position?: string;
 }
 
 export const HERO_PHOTO: Photo = {
-  id: "1624085568108-36410cfe4d24",
-  alt: "White Mercedes-Benz sedan with headlights on, parked on a city street at night",
-  position: "70% 60%",
+  local: "bmw-emerald-suv",
+  widths: [800, 1200],
+  alt: "Emerald green luxury SUV parked in front of mountains at sunset",
+  position: "40% 62%",
 };
 
 export const CTA_PHOTO: Photo = {
-  id: "1692632146184-08b6f4828a23",
-  alt: "Close-up of a black Mercedes-AMG grille and wheel",
-  position: "60% 50%",
+  local: "bmw-dusk",
+  widths: [800, 1350],
+  alt: "Silver luxury SUV driving on an open road at dusk",
+  position: "50% 70%",
 };
 
 export const VEHICLE_PHOTOS: Record<VehicleSlug, Photo> = {
   sedan: {
-    id: "1671332752309-259609d9801f",
-    alt: "Black Mercedes-Benz sedans on a city street at night",
-    position: "50% 60%",
+    local: "volvo-s90",
+    widths: [524],
+    alt: "White luxury sedan on a city street",
+    position: "45% 60%",
   },
   suv: {
-    id: "1769787301187-0fab290ba2f2",
-    alt: "Chauffeur in a suit walking past black executive SUVs",
-    position: "50% 55%",
+    local: "lexus-lx",
+    widths: [800, 1200],
+    alt: "Grey full-size luxury SUV driving on a highway",
+    position: "45% 62%",
   },
   escalade: {
-    id: "1778541999438-983cff5703fa",
-    alt: "Metallic blue Cadillac Escalade parked on a city street",
-    position: "55% 65%",
+    local: "cadillac-escalade",
+    widths: [800, 1200],
+    alt: "Black Cadillac Escalade driving on a desert highway",
+    position: "55% 60%",
   },
   sprinter: {
     id: "1765461734605-34657fa04db2",
@@ -333,10 +343,43 @@ export const VEHICLE_PHOTOS: Record<VehicleSlug, Photo> = {
   },
 };
 
+/** Extra photos for the "experience" gallery on the home page. */
+export const GALLERY_PHOTOS: (Photo & { caption: string })[] = [
+  {
+    local: "mercedes-gle-sunset",
+    widths: [447],
+    alt: "Dark grey Mercedes SUV coupe at sunset",
+    position: "50% 55%",
+    caption: "Evening arrivals",
+  },
+  {
+    local: "volvo-xc90",
+    widths: [750],
+    alt: "Champagne luxury SUV parked on a city street",
+    position: "40% 60%",
+    caption: "Executive travel",
+  },
+  {
+    local: "bmw-dusk",
+    widths: [800, 1350],
+    alt: "Silver luxury SUV driving at dusk",
+    position: "50% 72%",
+    caption: "Long-distance comfort",
+  },
+];
+
 export function photoUrl(photo: Photo, width: number, quality = 75): string {
+  if (photo.local) {
+    const widths = photo.widths?.length ? photo.widths : [800];
+    const best = widths.find((w) => w >= width) ?? widths[widths.length - 1];
+    return `/images/cars/${photo.local}-${best}.webp`;
+  }
   return `https://images.unsplash.com/photo-${photo.id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 }
 
 export function photoSrcSet(photo: Photo, widths: number[] = [480, 800, 1200, 1600, 2000]): string {
+  if (photo.local) {
+    return (photo.widths?.length ? photo.widths : [800]).map((w) => `/images/cars/${photo.local}-${w}.webp ${w}w`).join(", ");
+  }
   return widths.map((w) => `${photoUrl(photo, w)} ${w}w`).join(", ");
 }
