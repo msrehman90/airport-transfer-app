@@ -7,7 +7,7 @@ export interface LatLng {
 
 export interface DistanceResult {
   miles: number;
-  source: "google" | "osm";
+  source: "google" | "geoapify" | "osm";
 }
 
 export class DistanceError extends Error {}
@@ -69,6 +69,79 @@ async function googleDistance(origin: string | LatLng, destination: string | Lat
   return element.distanceMeters / METERS_PER_MILE;
 }
 
+function geoapifyKey(): string {
+  return process.env.GEOAPIFY_API_KEY || "";
+}
+
+async function geoapifyFetch<T>(url: URL): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8000) });
+  } catch {
+    throw new DistanceError("Address lookup is unavailable right now. Choose a city zone instead, or call us for a quote.");
+  }
+  if (!res.ok) throw new DistanceError(`Address service returned ${res.status}`);
+  return (await res.json()) as T;
+}
+
+/** Geoapify geocoding (free plan: 3,000 credits/day, no card). */
+async function geocodeGeoapify(address: string, key: string): Promise<LatLng> {
+  const cacheKey = `geoapify:${address.trim().toLowerCase()}`;
+  const cached = geocodeCache.get(cacheKey);
+  if (cached) return cached;
+  const url = new URL("https://api.geoapify.com/v1/geocode/search");
+  url.searchParams.set("text", address);
+  url.searchParams.set("filter", "countrycode:us");
+  url.searchParams.set("limit", "1");
+  url.searchParams.set("format", "json");
+  url.searchParams.set("apiKey", key);
+  const data = await geoapifyFetch<{ results?: { lat: number; lon: number }[] }>(url);
+  const first = data.results?.[0];
+  if (!first) throw new DistanceError(`We couldn't find "${address}". Check the address or choose a city zone.`);
+  const point = { lat: first.lat, lng: first.lon };
+  geocodeCache.set(cacheKey, point);
+  return point;
+}
+
+/** Geoapify driving route distance in miles. */
+async function geoapifyDistance(origin: string | LatLng, destination: string | LatLng, key: string): Promise<number> {
+  const [a, b] = await Promise.all([
+    typeof origin === "string" ? geocodeGeoapify(origin, key) : Promise.resolve(origin),
+    typeof destination === "string" ? geocodeGeoapify(destination, key) : Promise.resolve(destination),
+  ]);
+  const url = new URL("https://api.geoapify.com/v1/routing");
+  url.searchParams.set("waypoints", `${a.lat},${a.lng}|${b.lat},${b.lng}`);
+  url.searchParams.set("mode", "drive");
+  url.searchParams.set("format", "json");
+  url.searchParams.set("apiKey", key);
+  const data = await geoapifyFetch<{ results?: { distance?: number }[] }>(url);
+  const meters = data.results?.[0]?.distance;
+  if (typeof meters !== "number") throw new DistanceError("We couldn't find a driving route between those addresses.");
+  return meters / METERS_PER_MILE;
+}
+
+export interface AddressSuggestion {
+  id: string;
+  text: string;
+}
+
+/** Address autocomplete via Geoapify, biased to the service area. Returns null when not configured. */
+export async function suggestAddresses(text: string, near: LatLng): Promise<AddressSuggestion[] | null> {
+  const key = geoapifyKey();
+  if (!key) return null;
+  const url = new URL("https://api.geoapify.com/v1/geocode/autocomplete");
+  url.searchParams.set("text", text);
+  url.searchParams.set("filter", "countrycode:us");
+  url.searchParams.set("bias", `proximity:${near.lng},${near.lat}`);
+  url.searchParams.set("limit", "5");
+  url.searchParams.set("format", "json");
+  url.searchParams.set("apiKey", key);
+  const data = await geoapifyFetch<{ results?: { place_id?: string; formatted?: string }[] }>(url);
+  return (data.results ?? [])
+    .filter((r) => r.formatted)
+    .map((r, i) => ({ id: r.place_id ?? String(i), text: r.formatted! }));
+}
+
 export async function geocodeOSM(address: string): Promise<LatLng> {
   const key = address.trim().toLowerCase();
   const cached = geocodeCache.get(key);
@@ -100,7 +173,7 @@ export async function geocodeOSM(address: string): Promise<LatLng> {
 /**
  * Driving distance in miles between two places. Each end may be a free-text address
  * or known coordinates (used for configured airports/stations).
- * Uses the Google Routes API (route matrix) when a key is set, otherwise OpenStreetMap geocoding
+ * Provider order: Google Routes API (GOOGLE key) → Geoapify (free, GEOAPIFY_API_KEY) → otherwise OpenStreetMap geocoding
  * with a road-distance factor.
  */
 export async function getDrivingDistanceMiles(
@@ -115,6 +188,17 @@ export async function getDrivingDistanceMiles(
     } catch (err) {
       // Fall through to OSM if Google is misconfigured (e.g. referrer-restricted key or API not enabled).
       console.warn("[distance] Google Routes API failed, using OpenStreetMap fallback:", (err as Error).message);
+    }
+  }
+
+  const geoKey = geoapifyKey();
+  if (geoKey) {
+    try {
+      const miles = await geoapifyDistance(origin, destination, geoKey);
+      return { miles: Math.round(miles * 10) / 10, source: "geoapify" };
+    } catch (err) {
+      if (err instanceof DistanceError && /couldn't find/.test(err.message)) throw err;
+      console.warn("[distance] Geoapify failed, using OpenStreetMap fallback:", (err as Error).message);
     }
   }
 

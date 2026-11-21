@@ -35,8 +35,9 @@ interface Suggestion {
 }
 
 /**
- * Address field with Google Places (New) autocomplete when
- * NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set; a plain text input otherwise.
+ * Address field with suggestions from Google Places (New) when
+ * NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set, otherwise from the free Geoapify proxy
+ * (/api/places/autocomplete, GEOAPIFY_API_KEY); a plain text input if neither is set.
  */
 export function AddressInput({
   id,
@@ -55,6 +56,8 @@ export function AddressInput({
 }) {
   const key = publicEnv.googleMapsKey;
   const [ready, setReady] = useState(false);
+  /** "google" when a Google key is set, otherwise our server proxy (Geoapify); null = no suggestions. */
+  const [provider, setProvider] = useState<"google" | "server" | null>(key ? null : "server");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
@@ -62,6 +65,7 @@ export function AddressInput({
   const tokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const listId = useId();
+  const suggestEnabled = provider !== null && (provider === "server" || ready);
 
   useEffect(() => {
     if (!key) return;
@@ -72,20 +76,47 @@ export function AddressInput({
         if (cancelled) return;
         placesRef.current = lib;
         tokenRef.current = new lib.AutocompleteSessionToken();
+        setProvider("google");
         setReady(true);
       })
-      .catch(() => setReady(false));
+      .catch(() => {
+        setProvider("server");
+        setReady(false);
+      });
     return () => {
       cancelled = true;
     };
   }, [key]);
 
+  function showSuggestions(mapped: Suggestion[]) {
+    setSuggestions(mapped);
+    setOpen(mapped.length > 0);
+    setActive(-1);
+  }
+
   function requestSuggestions(input: string) {
-    if (!ready || !placesRef.current || input.trim().length < 3) {
+    if (!provider || input.trim().length < 3) {
       setSuggestions([]);
       return;
     }
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (provider === "server") {
+      debounceRef.current = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/places/autocomplete?q=${encodeURIComponent(input)}`);
+          const data = (await res.json()) as { enabled: boolean; suggestions: Suggestion[] };
+          if (!data.enabled) {
+            setProvider(null);
+            return;
+          }
+          showSuggestions(data.suggestions);
+        } catch {
+          setSuggestions([]);
+        }
+      }, 300);
+      return;
+    }
+    if (!ready || !placesRef.current) return;
     debounceRef.current = setTimeout(async () => {
       try {
         const { suggestions: results } = await placesRef.current.AutocompleteSuggestion.fetchAutocompleteSuggestions({
@@ -99,9 +130,7 @@ export function AddressInput({
           .filter(Boolean)
           .slice(0, 5)
           .map((p: any) => ({ id: p.placeId, text: p.text?.toString?.() ?? String(p.text) }));
-        setSuggestions(mapped);
-        setOpen(mapped.length > 0);
-        setActive(-1);
+        showSuggestions(mapped);
       } catch {
         setSuggestions([]);
       }
@@ -112,7 +141,7 @@ export function AddressInput({
     onChange(s.text);
     setOpen(false);
     setSuggestions([]);
-    if (placesRef.current) tokenRef.current = new placesRef.current.AutocompleteSessionToken();
+    if (provider === "google" && placesRef.current) tokenRef.current = new placesRef.current.AutocompleteSessionToken();
   }
 
   return (
@@ -125,10 +154,10 @@ export function AddressInput({
         placeholder={placeholder ?? "Street address, city, state"}
         required={required}
         autoComplete="street-address"
-        role={ready ? "combobox" : undefined}
-        aria-expanded={ready ? open : undefined}
-        aria-controls={ready ? listId : undefined}
-        aria-autocomplete={ready ? "list" : undefined}
+        role={suggestEnabled ? "combobox" : undefined}
+        aria-expanded={suggestEnabled ? open : undefined}
+        aria-controls={suggestEnabled ? listId : undefined}
+        aria-autocomplete={suggestEnabled ? "list" : undefined}
         aria-invalid={invalid || undefined}
         onChange={(e) => {
           onChange(e.target.value);
@@ -168,7 +197,23 @@ export function AddressInput({
               {s.text}
             </li>
           ))}
-          <li className="px-4 py-1.5 text-right text-[10px] text-muted">Powered by Google</li>
+          <li className="px-4 py-1.5 text-right text-[10px] text-muted">
+            {provider === "google" ? (
+              "Powered by Google"
+            ) : (
+              <>
+                Powered by{" "}
+                <a href="https://www.geoapify.com/" target="_blank" rel="noopener noreferrer" className="underline">
+                  Geoapify
+                </a>{" "}
+                · ©{" "}
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline">
+                  OpenStreetMap
+                </a>{" "}
+                contributors
+              </>
+            )}
+          </li>
         </ul>
       )}
     </div>

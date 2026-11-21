@@ -16,6 +16,7 @@ export async function GET() {
         supabase: serverEnv.supabaseReady(),
         stripe: serverEnv.stripeReady(),
         googleMaps: serverEnv.googleMapsReady(),
+        geoapify: Boolean(process.env.GEOAPIFY_API_KEY),
         airlabs: serverEnv.airlabsReady(),
         email: serverEnv.resendReady(),
       },

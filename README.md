@@ -67,6 +67,7 @@ cp .env.example .env.local
 | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Real database. **All three are required** to leave Demo Mode |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Real card payments and refunds |
+| `GEOAPIFY_API_KEY` | **Free** address suggestions and driving distances (3,000 credits/day, no credit card). Requires the "Powered by Geoapify · © OpenStreetMap" attribution, which the app shows |
 | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (+ optional `GOOGLE_MAPS_SERVER_KEY`) | Address autocomplete (Places API New) and driving distances (Routes API). Without it, distances use OpenStreetMap |
 | `AIRLABS_API_KEY`, `CRON_SECRET` | Live flight status and the pickup-adjustment cron |
 | `RESEND_API_KEY`, `FROM_EMAIL`, `DISPATCH_EMAIL` | Quote, confirmation, cancellation and flight-alert emails (otherwise logged to the console) |
@@ -91,7 +92,11 @@ The service-role key is only used on the server. The anon key can only read the 
 
 Test card: `4242 4242 4242 4242`, any future date, any CVC.
 
-### 3. Google Maps
+### 3. Maps: Geoapify (free) or Google
+
+**Free:** sign up at https://www.geoapify.com (no card), create a project at https://myprojects.geoapify.com, and set `GEOAPIFY_API_KEY`. The key stays on the server; the browser calls `/api/places/autocomplete`.
+
+**Google (optional, needs billing):**
 
 Enable **Places API (New)** and **Routes API** (Distance Matrix is now a legacy API). If your browser key is restricted to your domain (recommended), add an unrestricted-by-referrer, API-restricted `GOOGLE_MAPS_SERVER_KEY` for server-side distance lookups.
 
