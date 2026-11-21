@@ -68,7 +68,8 @@ cp .env.example .env.local
 
 1. Create a project at https://supabase.com.
 2. Open **SQL Editor**, paste the contents of `supabase/schema.sql` and run it. It creates the tables, Row Level Security policies and seed data (4 vehicle classes, 208 flat rates, 3 sample drivers, 4 vehicles). It is safe to re-run.
-3. Copy the project URL, anon key and service-role key from **Project Settings → API** into `.env.local`.
+3. From **Project Settings → API Keys**, copy into `.env.local`: the project URL (`https://<project-ref>.supabase.co`) → `NEXT_PUBLIC_SUPABASE_URL`, the **Publishable key** (`sb_publishable_…`) → `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and the **Secret key** (`sb_secret_…`) → `SUPABASE_SERVICE_ROLE_KEY`. Legacy anon/service_role keys also work.
+4. When creating the project, keep **Enable Data API** and **Grant API access to new tables automatically** turned on.
 
 The service-role key is only used on the server. The anon key can only read the price list.
 
