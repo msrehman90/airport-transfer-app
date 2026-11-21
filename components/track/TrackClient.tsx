@@ -169,7 +169,7 @@ export function TrackClient() {
           <input
             id="ref"
             className="input-lux font-mono uppercase tracking-wider"
-            placeholder="CE-XXXXXX"
+            placeholder={`${BRAND.refPrefix}-XXXXXX`}
             value={ref}
             onChange={(e) => setRef(e.target.value.toUpperCase())}
             required
@@ -184,7 +184,7 @@ export function TrackClient() {
         {error && <Alert tone="error">{error}</Alert>}
         {!LIVE_DATA && (
           <p className="text-xs text-muted">
-            Demo: try <span className="font-mono text-ivory-dim">CE-DEMO01</span> with <span className="text-ivory-dim">avery@example.com</span>.
+            Demo: try <span className="font-mono text-ivory-dim">PR-DEMO01</span> with <span className="text-ivory-dim">avery@example.com</span>.
           </p>
         )}
       </form>

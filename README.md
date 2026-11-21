@@ -1,4 +1,4 @@
-# Capital Executive Chauffeurs — Airport Transfer Booking App
+# Premium Rentals — Airport Transfer Booking App
 
 A full-stack luxury airport pickup, drop-off and chauffeur booking platform built with **Next.js 15 (App Router, TypeScript)**, **Tailwind CSS v4**, **Framer Motion**, **Supabase**, **Stripe**, **Google Maps** and **AirLabs** flight tracking.
 
@@ -41,7 +41,7 @@ Open http://localhost:3000.
 
 - Admin: http://localhost:3000/admin, passcode `admin123`
 - Driver: http://localhost:3000/driver, passcode `driver123`, then pick a driver
-- Sample booking for `/track`: `CE-DEMO01` with `avery@example.com`
+- Sample booking for `/track`: `PR-DEMO01` with `avery@example.com`
 - In Demo Mode, flight numbers ending in `0` (e.g. `AA2140`) simulate an airline cancellation
 - "Reset demo data" in the top banner restores the sample bookings
 

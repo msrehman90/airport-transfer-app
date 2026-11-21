@@ -25,7 +25,7 @@ export function SiteHeader() {
       <div className="container-lux flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <span className="grid h-9 w-9 place-items-center rounded-full border border-gold/60 font-serif text-lg text-gold">
-            C
+            {BRAND.name.charAt(0)}
           </span>
           <span className="leading-tight">
             <span className="block font-serif text-lg tracking-wide text-ivory">{BRAND.shortName}</span>

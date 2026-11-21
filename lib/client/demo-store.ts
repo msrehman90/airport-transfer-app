@@ -12,7 +12,7 @@ import type { Booking, BookingView, Driver, FleetVehicle } from "../types";
  * inside one browser.
  */
 
-const STORAGE_KEY = "cec_demo_db_v1";
+const STORAGE_KEY = "pr_demo_db_v2";
 const CHANGE_EVENT = "cec-demo-db-change";
 
 export interface DemoDB {
@@ -89,7 +89,7 @@ function seedDB(): DemoDB {
   const iad = getAirport("IAD")!;
   const bookings: Booking[] = [
     sampleBooking({
-      bookingRef: "CE-DEMO01",
+      bookingRef: "PR-DEMO01",
       serviceType: "from_airport",
       vehicleSlug: "sedan",
       airportCode: "DCA",
@@ -108,7 +108,7 @@ function seedDB(): DemoDB {
       vehicleId: "veh-demo-1",
     }),
     sampleBooking({
-      bookingRef: "CE-DEMO02",
+      bookingRef: "PR-DEMO02",
       serviceType: "to_airport",
       vehicleSlug: "suv",
       airportCode: "IAD",
@@ -129,7 +129,7 @@ function seedDB(): DemoDB {
       status: "confirmed",
     }),
     sampleBooking({
-      bookingRef: "CE-DEMO03",
+      bookingRef: "PR-DEMO03",
       serviceType: "hourly",
       vehicleSlug: "escalade",
       hoursBooked: 4,

@@ -8,11 +8,13 @@
  */
 
 export const BRAND = {
-  name: "Capital Executive Chauffeurs",
-  shortName: "Capital Executive",
+  /** Prefix for booking references, e.g. PR-7K4QX2. */
+  refPrefix: "PR",
+  name: "Premium Rentals",
+  shortName: "Premium Rentals",
   tagline: "Flat-rate luxury airport transfers across the DC, Maryland & Virginia region.",
-  phone: "+1 (202) 555-0147",
-  email: "reservations@capitalexecutive.example",
+  phone: "+1 (571) 241-0295",
+  email: "reservations@premiumrentals.example",
   serviceArea: "Washington DC · Northern Virginia · Maryland",
 } as const;
 

@@ -1,7 +1,9 @@
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I to avoid confusion
 
-/** Generates a human-friendly booking reference such as "CE-7K4QX2". */
-export function generateBookingRef(prefix = "CE"): string {
+import { BRAND } from "./config";
+
+/** Generates a human-friendly booking reference such as "PR-7K4QX2". */
+export function generateBookingRef(prefix: string = BRAND.refPrefix): string {
   const bytes = new Uint8Array(6);
   globalThis.crypto.getRandomValues(bytes);
   let code = "";
