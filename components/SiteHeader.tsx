@@ -21,10 +21,10 @@ export function SiteHeader() {
   const isApp = pathname.startsWith("/admin") || pathname.startsWith("/driver");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-ink/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line/70 bg-white/95 backdrop-blur-md">
       <div className="container-lux flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-steel-light/60 bg-[radial-gradient(circle_at_30%_30%,rgba(52,211,153,0.25),transparent_70%)] font-serif text-lg text-brand-light shadow-[0_0_18px_-4px_rgba(52,211,153,0.6)]">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-brand font-serif text-lg text-white">
             {BRAND.name.charAt(0)}
           </span>
           <span className="leading-tight">

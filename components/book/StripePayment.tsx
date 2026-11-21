@@ -80,12 +80,12 @@ export function StripePayment(props: {
     () => ({
       clientSecret: props.clientSecret,
       appearance: {
-        theme: "night" as const,
+        theme: "stripe" as const,
         variables: {
-          colorPrimary: "#10b981",
-          colorBackground: "#07131c",
-          colorText: "#eef5f8",
-          colorDanger: "#e06a5a",
+          colorPrimary: "#0b1f3a",
+          colorBackground: "#ffffff",
+          colorText: "#0b1f3a",
+          colorDanger: "#c62828",
           borderRadius: "12px",
           fontFamily: "Inter, system-ui, sans-serif",
         },

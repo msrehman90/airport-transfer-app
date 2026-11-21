@@ -555,7 +555,7 @@ export function BookingFlow() {
                         aria-pressed={selected}
                         className={cn(
                           "group relative overflow-hidden rounded-2xl border text-left transition-colors",
-                          selected ? "border-brand bg-brand/[0.07] ring-1 ring-brand/50" : "border-line hover:border-steel-light/50",
+                          selected ? "border-brand bg-brand/[0.07] ring-2 ring-brand/15" : "border-line hover:border-steel-light/50",
                           tooSmall && "opacity-60",
                         )}
                       >
@@ -642,7 +642,7 @@ export function BookingFlow() {
                   >
                     <input
                       type="checkbox"
-                      className="mt-1 h-4 w-4 accent-[#10b981]"
+                      className="mt-1 h-4 w-4 accent-[#0b1f3a]"
                       checked={form.meetAndGreet}
                       onChange={(e) => update("meetAndGreet", e.target.checked)}
                     />

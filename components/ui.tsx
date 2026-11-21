@@ -14,10 +14,9 @@ type Variant = "primary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variantClass: Record<Variant, string> = {
-  primary:
-    "bg-[linear-gradient(135deg,var(--color-brand-light),var(--color-brand)_45%,#059669)] text-ink hover:brightness-110 shadow-[0_10px_30px_-10px_rgba(16,185,129,0.65)] ring-1 ring-inset ring-white/15",
-  outline: "border border-steel-light/50 text-steel-light hover:bg-steel/15 hover:border-steel-light",
-  ghost: "text-ivory-dim hover:text-ivory hover:bg-white/5",
+  primary: "bg-brand text-white hover:bg-brand-dark shadow-[0_8px_20px_-10px_rgba(11,31,58,0.55)]",
+  outline: "border border-brand/30 bg-white text-brand hover:border-brand hover:bg-brand/[0.04]",
+  ghost: "text-ivory-dim hover:text-ivory hover:bg-ink-2",
   danger: "border border-danger/60 text-danger hover:bg-danger/10",
 };
 
@@ -97,14 +96,14 @@ export function Spinner({ className }: { className?: string }) {
 }
 
 const statusTone: Record<BookingStatus, string> = {
-  pending: "bg-warning/15 text-warning border-warning/30",
-  confirmed: "bg-sky-400/10 text-sky-300 border-sky-400/30",
-  assigned: "bg-violet-400/10 text-violet-300 border-violet-400/30",
-  en_route: "bg-steel/15 text-steel-light border-steel/40",
-  arrived: "bg-steel/25 text-steel-light border-steel/50",
-  in_progress: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30",
-  completed: "bg-success/15 text-success border-success/30",
-  cancelled: "bg-danger/10 text-danger border-danger/30",
+  pending: "bg-amber-50 text-amber-800 border-amber-200",
+  confirmed: "bg-sky-50 text-sky-800 border-sky-200",
+  assigned: "bg-violet-50 text-violet-800 border-violet-200",
+  en_route: "bg-blue-50 text-blue-800 border-blue-200",
+  arrived: "bg-indigo-50 text-indigo-800 border-indigo-200",
+  in_progress: "bg-teal-50 text-teal-800 border-teal-200",
+  completed: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  cancelled: "bg-red-50 text-red-800 border-red-200",
 };
 
 export function StatusBadge({ status }: { status: BookingStatus }) {
@@ -118,10 +117,10 @@ export function StatusBadge({ status }: { status: BookingStatus }) {
 export function PaymentBadge({ status }: { status: PaymentStatus }) {
   const tone =
     status === "paid"
-      ? "bg-success/15 text-success border-success/30"
+      ? "bg-emerald-50 text-emerald-800 border-emerald-200"
       : status === "refunded"
-        ? "bg-sky-400/10 text-sky-300 border-sky-400/30"
-        : "bg-white/5 text-ivory-dim border-line";
+        ? "bg-sky-50 text-sky-800 border-sky-200"
+        : "bg-ink-2 text-ivory-dim border-line";
   return (
     <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold capitalize", tone)}>
       {status}
@@ -131,10 +130,10 @@ export function PaymentBadge({ status }: { status: PaymentStatus }) {
 
 export function Alert({ tone = "info", children }: { tone?: "info" | "error" | "success" | "warning"; children: ReactNode }) {
   const tones = {
-    info: "border-brand/30 bg-brand/5 text-ivory-dim",
-    error: "border-danger/40 bg-danger/10 text-danger",
-    success: "border-success/40 bg-success/10 text-success",
-    warning: "border-warning/40 bg-warning/10 text-warning",
+    info: "border-brand/15 bg-ink-2 text-ivory-dim",
+    error: "border-red-200 bg-red-50 text-red-800",
+    success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+    warning: "border-amber-200 bg-amber-50 text-amber-800",
   };
   return (
     <div className={cn("rounded-xl border px-4 py-3 text-sm", tones[tone])} role={tone === "error" ? "alert" : "status"}>

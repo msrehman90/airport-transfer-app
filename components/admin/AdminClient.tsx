@@ -364,12 +364,12 @@ function BookingRow({
   }
 
   return (
-    <div className={cn("border-b border-line/70 last:border-0", open && "bg-white/[0.02]")}>
+    <div className={cn("border-b border-line/70 last:border-0", open && "bg-ink-2/60")}>
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="grid w-full grid-cols-1 gap-2 px-5 py-4 text-left text-sm hover:bg-white/[0.02] lg:grid-cols-[110px_1.2fr_1.6fr_1fr_1fr_110px_24px] lg:items-center lg:gap-3"
+        className="grid w-full grid-cols-1 gap-2 px-5 py-4 text-left text-sm hover:bg-ink-2/60 lg:grid-cols-[110px_1.2fr_1.6fr_1fr_1fr_110px_24px] lg:items-center lg:gap-3"
       >
         <span>
           <span className="block text-ivory">{formatDateTime(pickupIso, { withZone: false })}</span>

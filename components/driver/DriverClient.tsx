@@ -248,7 +248,7 @@ function RideCard({ ride, onUpdated }: { ride: BookingView; onUpdated: () => voi
           {ride.meetAndGreet && <span className="text-brand">Meet & Greet: name sign at baggage claim</span>}
           {ride.childSeats > 0 && <span className="text-brand">{ride.childSeats} child seat(s)</span>}
         </div>
-        {ride.notes && <p className="rounded-lg bg-white/5 px-3 py-2 text-ivory-dim">“{ride.notes}”</p>}
+        {ride.notes && <p className="rounded-lg bg-ink-2 px-3 py-2 text-ivory-dim">“{ride.notes}”</p>}
         <p className="text-ivory-dim">
           <span className="text-ivory">{ride.customerName}</span> · <span className="font-mono text-xs text-brand">{ride.bookingRef}</span>
         </p>

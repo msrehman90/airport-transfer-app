@@ -36,7 +36,7 @@ export function FleetCarousel() {
             </motion.div>
           </AnimatePresence>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-panel" />
-          <span className="absolute left-5 top-5 rounded-full border border-white/15 bg-ink/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-steel-light backdrop-blur">
+          <span className="absolute left-5 top-5 rounded-full border border-line bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory">
             {String(index + 1).padStart(2, "0")} / {String(VEHICLE_CLASSES.length).padStart(2, "0")}
           </span>
         </div>
@@ -82,7 +82,7 @@ export function FleetCarousel() {
               type="button"
               onClick={() => go(-1)}
               aria-label="Previous vehicle"
-              className="grid h-11 w-11 place-items-center rounded-full border border-line text-ivory-dim hover:border-steel-light hover:text-steel-light"
+              className="grid h-11 w-11 place-items-center rounded-full border border-line text-ivory-dim hover:border-brand hover:text-brand"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -90,7 +90,7 @@ export function FleetCarousel() {
               type="button"
               onClick={() => go(1)}
               aria-label="Next vehicle"
-              className="grid h-11 w-11 place-items-center rounded-full border border-line text-ivory-dim hover:border-steel-light hover:text-steel-light"
+              className="grid h-11 w-11 place-items-center rounded-full border border-line text-ivory-dim hover:border-brand hover:text-brand"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -110,7 +110,7 @@ export function FleetCarousel() {
                 }}
                 className={cn(
                   "h-1 flex-1 rounded-full transition-colors",
-                  i === index ? "bg-[linear-gradient(90deg,var(--color-brand-light),var(--color-steel-light))]" : "bg-line hover:bg-muted",
+                  i === index ? "bg-brand" : "bg-line hover:bg-muted",
                 )}
               />
             ))}

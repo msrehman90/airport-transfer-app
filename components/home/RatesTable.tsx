@@ -79,7 +79,7 @@ export function RatesTable() {
             </thead>
             <tbody>
               {CITY_ZONES.map((z) => (
-                <tr key={z.slug} className="border-b border-line/60 last:border-0 hover:bg-white/[0.02]">
+                <tr key={z.slug} className="border-b border-line/60 last:border-0 hover:bg-ink-2">
                   <td className="px-5 py-3.5">
                     <span className="text-ivory">{z.name}</span>
                     <span className="ml-2 text-xs text-muted">{z.state}</span>

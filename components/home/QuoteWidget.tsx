@@ -85,7 +85,7 @@ export function QuoteWidget() {
   }
 
   return (
-    <div className="card-lux p-5 shadow-2xl shadow-black/50 sm:p-6">
+    <div className="card-lux p-5 shadow-[0_30px_70px_-25px_rgba(11,31,58,0.45)] sm:p-6">
       <div className="mb-5 grid grid-cols-4 gap-1 rounded-full border border-line bg-ink-2 p-1" role="tablist">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button

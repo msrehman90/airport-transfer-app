@@ -307,7 +307,7 @@ export const HERO_PHOTO: Photo = {
   local: "bmw-emerald-suv",
   widths: [800, 1200],
   alt: "Emerald green luxury SUV parked in front of mountains at sunset",
-  position: "40% 62%",
+  position: "50% 58%",
 };
 
 export const CTA_PHOTO: Photo = {

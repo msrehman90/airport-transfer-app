@@ -29,18 +29,14 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Photo photo={HERO_PHOTO} priority />
-          <div className="photo-shade absolute inset-0" />
-          <div className="hero-glow absolute inset-0" />
-        </div>
-        <div className="container-lux relative grid items-center gap-12 py-16 lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr] lg:py-24">
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f4f6f9_100%)]">
+        <div className="container-lux relative grid items-center gap-12 pb-12 pt-14 lg:grid-cols-[1.05fr_1fr] lg:pb-16 lg:pt-20">
           <div>
             <p className="eyebrow">{BRAND.serviceArea}</p>
             <h1 className="heading-lux mt-5 text-5xl leading-[1.05] sm:text-6xl lg:text-7xl">
               Arrive in <span className="brand-text italic">quiet luxury.</span>
             </h1>
+            <span className="metal-rule mt-6 block" />
             <p className="mt-6 max-w-xl text-lg text-ivory-dim">
               Chauffeured airport transfers at flat rates. We track your flight, adjust for delays and meet you at the door.
             </p>
@@ -54,7 +50,7 @@ export default function HomePage() {
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-ivory-dim">
               <span className="flex items-center gap-2">
-                <span className="flex text-brand-light">
+                <span className="flex text-amber-500">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-current" />
                   ))}
@@ -62,7 +58,7 @@ export default function HomePage() {
                 Five-star service
               </span>
               <span className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-steel-light" /> Free cancellation up to {FREE_CANCELLATION_HOURS}h before
+                <Sparkles className="h-4 w-4 text-brand-light" /> Free cancellation up to {FREE_CANCELLATION_HOURS}h before
               </span>
             </div>
           </div>
@@ -70,8 +66,15 @@ export default function HomePage() {
             <QuoteWidget />
           </div>
         </div>
-        <div className="relative border-y border-white/10 bg-ink/85">
-          <div className="container-lux flex flex-wrap items-center justify-center gap-x-10 gap-y-3 py-5 text-xs uppercase tracking-[0.25em] text-steel-light/80">
+
+        <div className="container-lux pb-14">
+          <div className="card-metal relative h-64 overflow-hidden sm:h-80 lg:h-[26rem]">
+            <Photo photo={HERO_PHOTO} priority />
+          </div>
+        </div>
+
+        <div className="border-y border-line bg-white">
+          <div className="container-lux flex flex-wrap items-center justify-center gap-x-10 gap-y-3 py-5 text-xs font-medium uppercase tracking-[0.25em] text-muted">
             {AIRPORTS.map((a) => (
               <span key={a.code}>{a.shortName}</span>
             ))}
@@ -93,17 +96,17 @@ export default function HomePage() {
                 sizes="(min-width: 1024px) 25vw, 50vw"
                 className="transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                 <p className="font-serif text-xl text-white sm:text-2xl">{v.name}</p>
-                <p className="mt-1 flex items-center gap-3 text-xs text-steel-light">
+                <p className="mt-1 flex items-center gap-3 text-xs text-white/85">
                   <span className="flex items-center gap-1">
                     <Users className="h-3.5 w-3.5" /> {v.maxPassengers}
                   </span>
                   <span className="flex items-center gap-1">
                     <Briefcase className="h-3.5 w-3.5" /> {v.maxLuggage}
                   </span>
-                  <span className="ml-auto text-brand-light">from {formatUSD(v.baseFare)}</span>
+                  <span className="ml-auto font-semibold text-emerald-300">from {formatUSD(v.baseFare)}</span>
                 </p>
               </div>
             </Link>
@@ -187,7 +190,7 @@ export default function HomePage() {
               className={`card-metal group relative overflow-hidden ${i === 0 ? "aspect-square md:row-span-2 md:aspect-auto" : "aspect-[16/10]"}`}
             >
               <Photo photo={p} sizes="(min-width: 768px) 33vw, 100vw" className="transition-transform duration-700 group-hover:scale-105" />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-4 font-serif text-lg text-white">
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 font-serif text-lg text-white">
                 {p.caption}
               </figcaption>
             </figure>
@@ -221,18 +224,17 @@ export default function HomePage() {
 
       {/* CTA */}
       <section className="container-lux py-20">
-        <div className="card-metal relative overflow-hidden">
-          <div className="absolute inset-0">
-            <Photo photo={CTA_PHOTO} sizes="100vw" />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,12,18,0.95),rgba(5,12,18,0.75)_50%,rgba(16,40,70,0.55))]" />
-          </div>
-          <div className="relative flex flex-col items-start gap-6 px-6 py-16 sm:px-12 sm:py-20">
+        <div className="card-metal grid overflow-hidden md:grid-cols-2">
+          <div className="flex flex-col items-start justify-center gap-6 px-6 py-14 sm:px-12">
             <p className="eyebrow">Book in under a minute</p>
-            <h2 className="heading-lux metal-text max-w-2xl text-4xl sm:text-5xl">Your chauffeur is one minute away.</h2>
-            <p className="max-w-xl text-ivory-dim">Pay securely, and change or cancel up to 24 hours ahead.</p>
+            <h2 className="heading-lux max-w-md text-4xl sm:text-5xl">Your chauffeur is one minute away.</h2>
+            <p className="max-w-md text-ivory-dim">Pay securely, and change or cancel up to 24 hours ahead.</p>
             <ButtonLink href="/book" size="lg">
               Book now
             </ButtonLink>
+          </div>
+          <div className="relative min-h-72">
+            <Photo photo={CTA_PHOTO} sizes="(min-width: 768px) 50vw, 100vw" className="absolute inset-0" />
           </div>
         </div>
       </section>
